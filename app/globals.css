@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground: 0, 0, 0;
+  --background: 250, 250, 250;
+  --primary: 63, 160, 56; /* #3fa038 */
+  --primary-foreground: 255, 255, 255;
+  --card: 255, 255, 255;
+  --card-foreground: 0, 0, 0;
+  --border: 229, 231, 235;
+  --input: 229, 231, 235;
+  --ring: 63, 160, 56;
+  --radius: 0.5rem;
+}
+
+/* Definición explícita de colores verdes para asegurar su aplicación */
+.text-verde {
+  color: #3fa038;
+}
+
+.bg-verde {
+  background-color: #3fa038;
+}
+
+.border-verde {
+  border-color: #3fa038;
+}
+
+.hover\:bg-verde:hover {
+  background-color: #3fa038;
+}
+
+.hover\:text-verde:hover {
+  color: #3fa038;
+}
+
+.hover\:border-verde:hover {
+  border-color: #3fa038;
+}
+
+.ring-verde {
+  --tw-ring-color: #3fa038;
+}
+
+body {
+  color: rgb(var(--foreground));
+  background-color: rgb(var(--background));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  html {
+    font-family: "Montserrat", sans-serif;
+  }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: scale(1.01);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}

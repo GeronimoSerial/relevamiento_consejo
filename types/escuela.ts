@@ -1,0 +1,33 @@
+export interface Escuela {
+  nombre: string
+  cue: number
+  categoria?: number
+  director: string
+  telefono?: number
+  correo?: string
+  departamento: string
+  localidad: string
+  fechaFundacion: string
+  zona?: string
+  turno?: string
+  cabecera?: string
+  esCentenaria?: boolean
+  tipoEscuela?: string
+  situacionRevistaDirector?: string
+  matricula2025: number
+  matricula2024?: number
+  ubicacion?: string
+  comparteEdificio?: string
+  tieneEdificioPropio?: boolean
+  empresaLimpieza?: string
+  cantidadDocenGrado?: number
+  cantidadDocenDobleTurno?: number
+  tieneProfesionalesSalud?: string
+  DocenEspeciales?: string
+  cantidadAdministrativos?: number
+  cantidadPorteros?: number
+  tieneCopaLecheAlmuerzo?: string
+  programasAcompañamiento?: string
+  conexionInternet?: string
+  problematicas?: string
+}
