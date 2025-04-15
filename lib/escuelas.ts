@@ -21,8 +21,9 @@ export function getAllEscuelas(): Escuela[] {
 }
 
 // Función para normalizar texto (eliminar acentos, convertir a minúsculas)
-export function normalizarTexto(texto: string): string {
-  return texto
+export function normalizarTexto(texto: unknown): string {
+  if (texto === null || texto === undefined) return ""
+  return String(texto)
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "") // Eliminar acentos

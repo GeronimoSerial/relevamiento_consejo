@@ -1,17 +1,18 @@
 export interface Escuela {
-  nombre: string
+  mail?: string
+  nombre: string | number
   cue: number
   categoria?: number
   director: string
-  telefono?: number
+  telefono?: number | string
   correo?: string
   departamento: string
   localidad: string
   fechaFundacion: string
   zona?: string
   turno?: string
-  cabecera?: string
-  esCentenaria?: boolean
+  cabecera?: string | number
+  esCentenaria?: string
   tipoEscuela?: string
   situacionRevistaDirector?: string
   matricula2025: number
@@ -34,7 +35,7 @@ export interface Escuela {
 }
 
 // Mapeo de supervisores por localidad
-export const supervisoresPorLocalidad = {
+export const supervisoresPorLocalidad: Record<string, string[]> = {
   "Berón de Astrada": ["Virginia Coronel"],
   "San Cosme": ["Virginia Coronel", "Patricia Ponce (Nivel Inicial)"],
   Ituzaingó: ["Virginia Coronel", "Patricia Ponce (Nivel Inicial)"],
@@ -91,7 +92,7 @@ export const todosSupervisores = [
 ]
 
 // Datos de escuelas esperadas por localidad
-export const escuelasEsperadas = {
+export const escuelasEsperadas: Record<string, number> = {
   "Bella Vista": 35,
   "Berón de Astrada": 6,
   Capital: 86,
