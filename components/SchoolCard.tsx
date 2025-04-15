@@ -3,6 +3,7 @@
 import { memo } from "react"
 import { School, User, Users, MapPin, Phone, UserCheck } from "lucide-react"
 import type { Escuela } from "@/types/escuela"
+import { supervisoresPorDepartamento } from "@/types/escuela"
 
 interface SchoolCardProps {
   escuela: Escuela
@@ -11,6 +12,13 @@ interface SchoolCardProps {
 
 // Usando memo para evitar re-renders innecesarios cuando las props no cambian
 const SchoolCard = memo(function SchoolCard({ escuela, onVerMas }: SchoolCardProps) {
+  // Obtener los supervisores del departamento
+  const getSupervisores = () => {
+    return supervisoresPorDepartamento[escuela.departamento.trim()] || []
+  }
+
+  const supervisores = getSupervisores()
+
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden card-hover h-full border border-verde/20">
       <div className="p-5 flex flex-col h-full">
@@ -33,15 +41,6 @@ const SchoolCard = memo(function SchoolCard({ escuela, onVerMas }: SchoolCardPro
             </p>
           </div>
 
-          {escuela.supervisor && (
-            <div className="flex items-start">
-              <UserCheck className="h-4 w-4 text-verde mr-2 mt-0.5 flex-shrink-0" />
-              <p>
-                <span className="font-medium">Supervisor/a:</span> {escuela.supervisor}
-              </p>
-            </div>
-          )}
-
           {escuela.telefono && (
             <div className="flex items-start">
               <Phone className="h-4 w-4 text-verde mr-2 mt-0.5 flex-shrink-0" />
@@ -61,9 +60,17 @@ const SchoolCard = memo(function SchoolCard({ escuela, onVerMas }: SchoolCardPro
           <div className="flex items-start">
             <MapPin className="h-4 w-4 text-verde mr-2 mt-0.5 flex-shrink-0" />
             <p>
-              <span className="font-medium">Ubicación:</span> {escuela.localidad}, {escuela.departamento}
+              <span className="font-medium">Ubicación:</span> {escuela.departamento}, {escuela.localidad}
             </p>
           </div>
+          {supervisores.length > 0 && (
+            <div className="flex items-start">
+              <UserCheck className="h-4 w-4 text-verde mr-2 mt-0.5 flex-shrink-0" />
+              <p>
+                <span className="font-medium">Supervisor/a:</span> {supervisores.join(", ")}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="mt-4 flex justify-end">

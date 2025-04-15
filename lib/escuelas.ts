@@ -1,13 +1,13 @@
 import type { Escuela } from "@/types/escuela"
-import { supervisoresPorLocalidad } from "@/types/escuela"
+import { supervisoresPorDepartamento } from "@/types/escuela"
 import escuelasData from "@/data/escuelas.json"
 
 // Función para obtener todas las escuelas (usado en getStaticProps)
 export function getAllEscuelas(): Escuela[] {
-  // Asignar supervisores a cada escuela basado en su localidad
+  // Asignar supervisores a cada escuela basado en su departamento
   const escuelasConSupervisores = escuelasData.map((escuela: Escuela) => {
-    // Obtener los supervisores para la localidad de la escuela
-    const supervisores = supervisoresPorLocalidad[escuela.localidad] || []
+    // Obtener los supervisores para el departamento de la escuela
+    const supervisores = supervisoresPorDepartamento[escuela.departamento] || []
 
     // Asignar el primer supervisor como supervisor principal (simplificación)
     // En un caso real, esto podría ser más complejo y requerir datos adicionales
@@ -66,9 +66,9 @@ export function filtrarEscuelas(escuelas: Escuela[], termino: string, supervisor
         return true
       }
 
-      // También verificamos en la lista de supervisores de la localidad
-      const supervisoresLocalidad = supervisoresPorLocalidad[escuela.localidad] || []
-      return supervisoresLocalidad.includes(supervisor)
+      // También verificamos en la lista de supervisores del departamento
+      const supervisoresDepartamento = supervisoresPorDepartamento[escuela.departamento] || []
+      return supervisoresDepartamento.includes(supervisor)
     })
   }
 

@@ -4,6 +4,7 @@ import { memo, useCallback, useMemo } from "react"
 import { motion } from "framer-motion"
 import { X } from "lucide-react"
 import type { Escuela } from "@/types/escuela"
+import { supervisoresPorDepartamento } from "@/types/escuela"
 
 interface SchoolModalProps {
   escuela: Escuela
@@ -27,6 +28,13 @@ const SchoolModal = memo(function SchoolModal({ escuela, onClose }: SchoolModalP
     )
   }, [])
 
+  // Obtener los supervisores del departamento
+  const getSupervisores = () => {
+    return supervisoresPorDepartamento[escuela.departamento.trim()] || []
+  }
+
+  const supervisores = getSupervisores()
+
   // Agrupar campos por secciones
   const secciones = useMemo(
     () => ({
@@ -36,7 +44,7 @@ const SchoolModal = memo(function SchoolModal({ escuela, onClose }: SchoolModalP
         { label: "Director/a", value: escuela.director },
         { label: "Zona", value: escuela.zona },
         { label: "Situación de Revista", value: escuela.situacionRevistaDirector},
-        { label: "Supervisor/a", value: escuela.supervisor },
+        { label: "Supervisor/a", value: supervisores.join(", ") },
         { label: "Fecha de fundación", value: escuela.fechaFundacion },
         { label: "Es centenaria", value: escuela.esCentenaria },
         { label: "Tipo de escuela", value: escuela.tipoEscuela },
@@ -74,7 +82,7 @@ const SchoolModal = memo(function SchoolModal({ escuela, onClose }: SchoolModalP
         { label: "Problemáticas", value: escuela.problematicas },
       ],
     }),
-    [escuela],
+    [escuela, supervisores],
   )
 
   return (

@@ -16,7 +16,7 @@ import {
 import { User, Info, AlertCircle } from "lucide-react"
 import type { Escuela } from "@/types/escuela"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { supervisoresPorLocalidad, todosSupervisores, escuelasEsperadas } from "@/types/escuela"
+import { supervisoresPorDepartamento, todosSupervisores, escuelasEsperadas } from "@/types/escuela"
 
 interface AvanceLocalidadesProps {
   escuelas: Escuela[]
@@ -25,7 +25,7 @@ interface AvanceLocalidadesProps {
 export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) {
   const [isMobile, setIsMobile] = useState(false)
   const [filtroSupervisor, setFiltroSupervisor] = useState("")
-  const [localidadSeleccionada, setLocalidadSeleccionada] = useState<string | null>(null)
+  const [departamentoSeleccionado, setLocalidadSeleccionada] = useState<string | null>(null)
 
   // Detectar si es dispositivo móvil
   useEffect(() => {
@@ -64,40 +64,40 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
     return conteo
   }, [escuelas])
 
-  // Obtener localidades filtradas por supervisor
-  const localidadesPorSupervisor = useMemo(() => {
+  // Obtener departamentos filtrados por supervisor
+  const departamentosPorSupervisor = useMemo(() => {
     if (!filtroSupervisor) {
-      return Object.keys(supervisoresPorLocalidad)
+      return Object.keys(supervisoresPorDepartamento)
     }
 
-    return Object.entries(supervisoresPorLocalidad)
+    return Object.entries(supervisoresPorDepartamento)
       .filter(([_, supervisores]) => supervisores.includes(filtroSupervisor))
-      .map(([localidad]) => localidad)
+      .map(([departamento]) => departamento)
   }, [filtroSupervisor])
 
   // Preparar los datos para el gráfico
   const data = useMemo(() => {
-    // Filtrar localidades por supervisor si hay uno seleccionado
-    const localidadesAMostrar = localidadesPorSupervisor
+    // Filtrar departamentos por supervisor si hay uno seleccionado
+    const departamentosAMostrar = departamentosPorSupervisor
 
     return Object.entries(escuelasEsperadas)
-      .filter(([localidad]) => localidadesAMostrar.includes(localidad))
-      .map(([localidad, esperadas]) => {
-        const cargadas = escuelasCargadas[localidad] || 0
+      .filter(([departamento]) => departamentosAMostrar.includes(departamento))
+      .map(([departamento, esperadas]) => {
+        const cargadas = escuelasCargadas[departamento] || 0
         const porcentaje = esperadas > 0 ? Math.round((cargadas / esperadas) * 100) : 0
         return {
-          localidad,
+          departamento,
           esperadas,
           cargadas,
           porcentaje,
-          supervisores: supervisoresPorLocalidad[localidad] || [],
+          supervisores: supervisoresPorDepartamento[departamento] || [],
         }
       })
       .sort((a, b) => {
         // Ordenar por porcentaje de menor a mayor
         return a.porcentaje - b.porcentaje
       })
-  }, [escuelasCargadas, localidadesPorSupervisor])
+  }, [escuelasCargadas, departamentosPorSupervisor])
 
   // Calcular estadísticas de avance
   const estadisticasAvance = useMemo(() => {
@@ -110,7 +110,7 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
       totalEscuelasEsperadas,
       totalEscuelasCargadas,
       porcentajeTotal,
-      cantidadLocalidades: data.length,
+      cantidadDepartamentos: data.length,
     }
   }, [data])
 
@@ -120,7 +120,7 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
       const item = payload[0].payload
       return (
         <div className="bg-white p-3 shadow-lg rounded-lg border border-gray-200 text-sm">
-          <p className="font-bold text-gray-800">{item.localidad}</p>
+          <p className="font-bold text-gray-800">{item.departamento}</p>
           <p className="text-verde">
             Cargadas: <span className="font-semibold">{item.cargadas}</span>
           </p>
@@ -148,15 +148,15 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
   }
 
   // Preparar datos para la lista de resumen
-  const resumenLocalidades = useMemo(() => {
+  const resumenDepartamentos = useMemo(() => {
     return data.sort((a, b) => b.porcentaje - a.porcentaje)
   }, [data])
 
-  // Función para mostrar detalles de una localidad
-  const mostrarDetallesLocalidad = (localidad: string) => {
-    setLocalidadSeleccionada(localidad)
+  // Función para mostrar detalles de un departamento
+  const mostrarDetallesDepartamento = (departamento: string) => {
+    setLocalidadSeleccionada(departamento)
     // Aquí se podría implementar la lógica para mostrar un modal o navegar a otra página
-    alert(`Mostrando detalles de ${localidad}`)
+    alert(`Mostrando detalles de ${departamento}`)
   }
 
   return (
@@ -192,8 +192,8 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
               {estadisticasAvance.totalEscuelasEsperadas} escuelas cargadas ({estadisticasAvance.porcentajeTotal}%)
             </p>
             <p className="text-sm md:text-base">
-              <span className="font-medium">Localidades:</span> {estadisticasAvance.cantidadLocalidades}{" "}
-              {filtroSupervisor ? `asignadas a ${filtroSupervisor}` : "en total"}
+              <span className="font-medium">Departamentos:</span> {estadisticasAvance.cantidadDepartamentos}{" "}
+              {filtroSupervisor ? `asignados a ${filtroSupervisor}` : "en total"}
             </p>
 
             <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
@@ -231,12 +231,12 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
                 {isMobile ? (
                   <>
                     <XAxis type="number" />
-                    <YAxis dataKey="localidad" type="category" tick={{ fontSize: 10 }} width={100} />
+                    <YAxis dataKey="departamento" type="category" tick={{ fontSize: 10 }} width={100} />
                   </>
                 ) : (
                   <>
                     <XAxis
-                      dataKey="localidad"
+                      dataKey="departamento"
                       tick={{ fontSize: 10 }}
                       angle={-45}
                       textAnchor="end"
@@ -258,7 +258,7 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
                   y={0}
                   stroke="#000"
                   strokeWidth={1}
-                  label={isMobile ? null : { value: "Escuelas", position: "insideBottomRight" }}
+                  label={isMobile ? undefined : { value: "Escuelas", position: "insideBottomRight" }}
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -280,9 +280,9 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
             </div>
           </div>
 
-          {/* Avance resumido por localidad */}
+          {/* Avance resumido por departamento */}
           <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Avance detallado por localidad</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Avance detallado por departamento</h3>
             <div className="bg-white rounded-lg shadow-md border border-gray-200">
               <div className="max-h-[400px] overflow-y-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -292,7 +292,7 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        Localidad
+                        Departamento
                       </th>
                       <th
                         scope="col"
@@ -309,14 +309,14 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {resumenLocalidades.map((item) => (
+                    {resumenDepartamentos.map((item) => (
                       <tr
-                        key={item.localidad}
+                        key={item.departamento}
                         className={`${item.porcentaje === 0 ? "bg-red-50" : ""} hover:bg-gray-50 cursor-pointer`}
-                        onClick={() => mostrarDetallesLocalidad(item.localidad)}
+                        onClick={() => mostrarDetallesDepartamento(item.departamento)}
                       >
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 flex items-center">
-                          {item.localidad}
+                          {item.departamento}
                           <Info className="h-4 w-4 ml-2 text-gray-400 hover:text-verde" />
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">

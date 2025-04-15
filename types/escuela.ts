@@ -34,8 +34,8 @@ export interface Escuela {
   supervisor?: string
 }
 
-// Mapeo de supervisores por localidad
-export const supervisoresPorLocalidad: Record<string, string[]> = {
+// Mapeo de supervisores por departamento
+export const supervisoresPorDepartamento: Record<string, string[]> = {
   "Berón de Astrada": ["Virginia Coronel"],
   "San Cosme": ["Virginia Coronel", "Patricia Ponce (Nivel Inicial)"],
   Ituzaingó: ["Virginia Coronel", "Patricia Ponce (Nivel Inicial)"],
