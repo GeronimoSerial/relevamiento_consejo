@@ -43,7 +43,7 @@ const SchoolModal = memo(function SchoolModal({ escuela, onClose }: SchoolModalP
       ],
       "Contacto y Ubicación": [
         { label: "Teléfono", value: escuela.telefono },
-        { label: "Correo", value: escuela.correo },
+        { label: "Correo", value: escuela.mail },
         { label: "Departamento", value: escuela.departamento },
         { label: "Localidad", value: escuela.localidad },
         { label: "Ubicación", value: escuela.ubicacion },
