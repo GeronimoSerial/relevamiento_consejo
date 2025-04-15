@@ -149,7 +149,7 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
 
   // Preparar datos para la lista de resumen
   const resumenLocalidades = useMemo(() => {
-    return data.sort((a, b) => a.localidad.localeCompare(b.localidad))
+    return data.sort((a, b) => b.porcentaje - a.porcentaje)
   }, [data])
 
   // Función para mostrar detalles de una localidad

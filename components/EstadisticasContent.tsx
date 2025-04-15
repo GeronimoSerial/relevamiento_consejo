@@ -42,10 +42,10 @@ export default function EstadisticasContent({ escuelas }: EstadisticasContentPro
   // Estadísticas generales calculadas una sola vez
   const estadisticasGenerales = useMemo(() => {
     const totalEscuelas = escuelas.length
-    const totalMatricula = escuelas.reduce((sum, escuela) => sum + (escuela.matricula2025 || 0), 0)
+    const totalMatricula = escuelas.reduce((sum, escuela) => sum + (Number(escuela.matricula2025) || 0), 0)
     const totalDepartamentos = new Set(escuelas.map((e) => e.departamento)).size
     const totalDirectores = new Set(escuelas.map((e) => e.director)).size
-    const totalMatricula2024 = escuelas.reduce((sum, escuela) => sum + (escuela.matricula2024 || 0), 0)
+    const totalMatricula2024 = escuelas.reduce((sum, escuela) => sum + (Number(escuela.matricula2024) || 0), 0)
 
 
     return {
