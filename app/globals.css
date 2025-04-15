@@ -76,6 +76,31 @@ body {
   }
 }
 
+/* Estilos para el contenido de prosa (texto enriquecido) */
+.prose strong {
+  @apply font-semibold text-gray-900;
+}
+
+.prose ul {
+  @apply list-disc pl-5 my-3;
+}
+
+.prose ol {
+  @apply list-decimal pl-5 my-3;
+}
+
+.prose li {
+  @apply mb-1;
+}
+
+.prose h3 {
+  @apply text-lg font-semibold text-gray-800 mt-4 mb-2;
+}
+
+.prose-green strong {
+  @apply text-verde;
+}
+
 .animate-fade-in {
   animation: fadeIn 0.5s ease-in-out;
 }

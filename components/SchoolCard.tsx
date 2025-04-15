@@ -1,7 +1,7 @@
 "use client"
 
 import { memo } from "react"
-import { School, User, Users, MapPin, Phone } from "lucide-react"
+import { School, User, Users, MapPin, Phone, UserCheck } from "lucide-react"
 import type { Escuela } from "@/types/escuela"
 
 interface SchoolCardProps {
@@ -32,6 +32,15 @@ const SchoolCard = memo(function SchoolCard({ escuela, onVerMas }: SchoolCardPro
               <span className="font-medium">Director/a:</span> {escuela.director}
             </p>
           </div>
+
+          {escuela.supervisor && (
+            <div className="flex items-start">
+              <UserCheck className="h-4 w-4 text-verde mr-2 mt-0.5 flex-shrink-0" />
+              <p>
+                <span className="font-medium">Supervisor/a:</span> {escuela.supervisor}
+              </p>
+            </div>
+          )}
 
           {escuela.telefono && (
             <div className="flex items-start">

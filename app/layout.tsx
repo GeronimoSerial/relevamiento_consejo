@@ -5,7 +5,7 @@ import "./globals.css"
 export const metadata: Metadata = {
   title: "Sistema de Relevamiento Escolar",
   description: "Consejo General de Educación - Centro de Cómputos",
-    generator: 'v0.dev'
+    generator: 'Centro de Cómputos - Serial Geronimo'
 }
 
 export default function RootLayout({
