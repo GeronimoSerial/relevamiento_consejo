@@ -2,7 +2,7 @@
 
 import { memo, useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
-import { Search, X, UserCheck } from "lucide-react"
+import { Search, X, UserCheck, Info } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { todosSupervisores } from "@/types/escuela"
 
@@ -102,6 +102,15 @@ const SearchBar = memo(function SearchBar({
               ))}
             </SelectContent>
           </Select>
+        </div>
+      </div>
+
+      <div className="bg-amber-50 p-3 rounded-lg border border-amber-200">
+        <div className="flex items-start">
+          <Info className="h-4 w-4 text-amber-600 mr-2 mt-0.5" />
+          <p className="text-xs text-amber-800">
+            La funcionalidad de filtrado por supervisores (En todas las secciones) está en proceso y se irá corrigiendo a medida que los datos sean cargados.
+          </p>
         </div>
       </div>
 
