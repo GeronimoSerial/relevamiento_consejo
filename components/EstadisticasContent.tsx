@@ -12,19 +12,19 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 // Importar componentes de gráficos de forma dinámica para evitar errores de SSR
 const MatriculaPorDepartamento = dynamic(() => import("@/components/graficos/MatriculaPorDepartamento"), {
   ssr: false,
-  loading: () => <div className="flex items-center justify-center h-[300px]">Cargando gráfico...</div>,
+  loading: () => <div className="flex items-center justify-center h-[300px] bg-gray-50 rounded-lg">Cargando gráfico...</div>,
 })
 const EscuelasPorCategoria = dynamic(() => import("@/components/graficos/EscuelasPorCategoria"), {
   ssr: false,
-  loading: () => <div className="flex items-center justify-center h-[300px]">Cargando gráfico...</div>,
+  loading: () => <div className="flex items-center justify-center h-[300px] bg-gray-50 rounded-lg">Cargando gráfico...</div>,
 })
 const EdificioPropio = dynamic(() => import("@/components/graficos/EdificioPropio"), {
   ssr: false,
-  loading: () => <div className="flex items-center justify-center h-[300px]">Cargando gráfico...</div>,
+  loading: () => <div className="flex items-center justify-center h-[300px] bg-gray-50 rounded-lg">Cargando gráfico...</div>,
 })
 const MatriculaBaja = dynamic(() => import("@/components/graficos/MatriculaBaja"), {
   ssr: false,
-  loading: () => <div className="flex items-center justify-center h-[300px]">Cargando gráfico...</div>,
+  loading: () => <div className="flex items-center justify-center h-[300px] bg-gray-50 rounded-lg">Cargando gráfico...</div>,
 })
 // const ConectividadInternet = dynamic(() => import("@/components/graficos/ConectividadInternet"), {
 //   ssr: false,
@@ -36,7 +36,7 @@ const MatriculaBaja = dynamic(() => import("@/components/graficos/MatriculaBaja"
 // })
 const AvanceLocalidades = dynamic(() => import("@/components/graficos/AvanceLocalidades"), {
   ssr: false,
-  loading: () => <div className="flex items-center justify-center h-[300px]">Cargando gráfico...</div>,
+  loading: () => <div className="flex items-center justify-center h-[300px] bg-gray-50 rounded-lg">Cargando gráfico...</div>,
 })
 
 interface EstadisticasContentProps {
