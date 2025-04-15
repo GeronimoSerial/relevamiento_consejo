@@ -33,26 +33,52 @@ async function generateGeminiInsight(supervisor: string) {
     const problematicas = obtenerProblematicasPorSupervisor(supervisor)
     
     const prompt = supervisor === "all"
-      ? `Analiza las siguientes problemáticas reportadas en las escuelas y genera un listado numerado (máximo 5 items) ordenado por prioridad:
+      ? `Analiza las siguientes problemáticas reportadas en las escuelas y genera un análisis conciso con el siguiente formato:
+
+ESCUELAS CON PROBLEMÁTICAS CRÍTICAS:
+
+1. <strong>Nombre de la escuela</strong>
+   - Problemática principal
+   - Impacto
+
+2. <strong>Nombre de la escuela</strong>
+   - Problemática principal
+   - Impacto
+
+(Continuar con máximo 5 escuelas)
 
 ${JSON.stringify(problematicas, null, 2)}
 
-Formato de respuesta requerido (cada problema debe estar en una línea separada):
-1- Escuela Primaria N° 8 - Instalaciones eléctricas antiguas (Riesgo de incendios y electrocución)
-2- Escuela Primaria N° 1 - Necesidad de reparación en techos (Riesgo de derrumbe)
-...
+Requisitos:
+- Máximo 5 escuelas
+- Enfócate en los problemas más urgentes
+- Usa lenguaje claro y directo
+- Incluye solo la información más relevante
+- No uses asteriscos (*)
+- Nombres de escuelas en negrita usando <strong>`
+      : `Analiza las problemáticas específicas para las escuelas del supervisor ${supervisor} y genera un análisis conciso con el siguiente formato:
 
-Enfócate en los problemas más críticos y urgentes.`
-      : `Analiza las problemáticas específicas para las escuelas del supervisor ${supervisor} y genera un listado numerado (máximo 5 items) ordenado por prioridad:
+ESCUELAS CON PROBLEMÁTICAS CRÍTICAS:
+
+1. <strong>Nombre de la escuela</strong>
+   - Problemática principal
+   - Impacto
+
+2. <strong>Nombre de la escuela</strong>
+   - Problemática principal
+   - Impacto
+
+(Continuar con máximo 5 escuelas)
 
 ${JSON.stringify(problematicas, null, 2)}
 
-Formato de respuesta requerido (cada problema debe estar en una línea separada):
-1- Escuela Primaria N° 8 - Instalaciones eléctricas antiguas (Riesgo de incendios y electrocución)
-2- Escuela Primaria N° 1 - Necesidad de reparación en techos (Riesgo de derrumbe)
-...
-
-Enfócate en los problemas más críticos y urgentes de las escuelas bajo su supervisión.`
+Requisitos:
+- Máximo 5 escuelas
+- Enfócate en los problemas más urgentes
+- Usa lenguaje claro y directo
+- Incluye solo la información más relevante
+- No uses asteriscos (*)
+- Nombres de escuelas en negrita usando <strong>`
 
     const response = await fetch('/api/gemini', {
       method: 'POST',
@@ -209,9 +235,11 @@ export default function AIInsights({}: AIInsightsProps) {
                 className="prose prose-green max-w-none"
               >
                 {insightText.split("\n").map((line, index) => (
-                  <div key={index} className="mb-4 text-gray-700 leading-relaxed">
-                    {line}
-                  </div>
+                  <div 
+                    key={index} 
+                    className="mb-4 text-gray-700 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: line }}
+                  />
                 ))}
               </motion.div>
             </AnimatePresence>
