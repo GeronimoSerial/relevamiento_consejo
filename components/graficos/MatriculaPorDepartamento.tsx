@@ -39,7 +39,7 @@ export default function MatriculaPorDepartamento({ escuelas }: MatriculaPorDepar
           if (!acc[departamento]) {
             acc[departamento] = 0
           }
-          acc[departamento] += escuela.matricula2025 || 0
+          acc[departamento] += Number(escuela.matricula2025) || 0
           return acc
         },
         {} as Record<string, number>,
