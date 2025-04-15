@@ -18,7 +18,7 @@ export interface Escuela {
   matricula2024?: number
   ubicacion?: string
   comparteEdificio?: string
-  tieneEdificioPropio?: boolean
+  tieneEdificioPropio?: string
   empresaLimpieza?: string
   cantidadDocenGrado?: number
   cantidadDocenDobleTurno?: number

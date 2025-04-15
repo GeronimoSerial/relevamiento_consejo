@@ -41,9 +41,9 @@ export default function EdificioPropio({ escuelas }: EdificioPropioProps) {
       let sinDatos = 0
 
       escuelas.forEach((escuela) => {
-        if (escuela.tieneEdificioPropio === true) {
+        if (escuela.tieneEdificioPropio === "Sí") {
           conEdificioPropio++
-        } else if (escuela.tieneEdificioPropio === false) {
+        } else if (escuela.tieneEdificioPropio === "No") {
           sinEdificioPropio++
         } else {
           sinDatos++
