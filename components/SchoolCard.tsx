@@ -41,15 +41,6 @@ const SchoolCard = memo(function SchoolCard({ escuela, onVerMas }: SchoolCardPro
             </p>
           </div>
 
-          {supervisores.length > 0 && (
-            <div className="flex items-start">
-              <UserCheck className="h-4 w-4 text-verde mr-2 mt-0.5 flex-shrink-0" />
-              <p>
-                <span className="font-medium">Supervisor/a:</span> {supervisores.join(", ")}
-              </p>
-            </div>
-          )}
-
           {escuela.telefono && (
             <div className="flex items-start">
               <Phone className="h-4 w-4 text-verde mr-2 mt-0.5 flex-shrink-0" />
@@ -69,9 +60,17 @@ const SchoolCard = memo(function SchoolCard({ escuela, onVerMas }: SchoolCardPro
           <div className="flex items-start">
             <MapPin className="h-4 w-4 text-verde mr-2 mt-0.5 flex-shrink-0" />
             <p>
-              <span className="font-medium">Ubicación:</span> {escuela.localidad}, {escuela.departamento}
+              <span className="font-medium">Ubicación:</span> {escuela.departamento}, {escuela.localidad}
             </p>
           </div>
+          {supervisores.length > 0 && (
+            <div className="flex items-start">
+              <UserCheck className="h-4 w-4 text-verde mr-2 mt-0.5 flex-shrink-0" />
+              <p>
+                <span className="font-medium">Supervisor/a:</span> {supervisores.join(", ")}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="mt-4 flex justify-end">
