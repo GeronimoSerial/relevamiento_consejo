@@ -4,12 +4,10 @@ import { useState, useEffect, useCallback, useMemo } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import dynamic from "next/dynamic"
-import Header from "@/components/Header"
 import SearchBar from "@/components/SearchBar"
 import SchoolCard from "@/components/SchoolCard"
 import Pagination from "@/components/Pagination"
 import NoResults from "@/components/NoResults"
-import EstadisticasSection from "@/components/EstadisticasSection"
 import { filtrarEscuelas, paginarEscuelas } from "@/lib/escuelas"
 import type { Escuela } from "@/types/escuela"
 
@@ -30,36 +28,39 @@ interface EscuelasClientProps {
 export default function EscuelasClient({ initialEscuelas }: EscuelasClientProps) {
   const searchParams = useSearchParams()
 
-  // Obtener el término de búsqueda y la página de los parámetros de URL
+  // Obtener parámetros de URL
   const initialSearchTerm = searchParams.get("q") || ""
+  const initialSupervisor = searchParams.get("supervisor") || ""
   const initialPage = Number.parseInt(searchParams.get("page") || "1", 10)
 
   const [escuelas] = useState<Escuela[]>(initialEscuelas)
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm)
+  const [supervisor, setSupervisor] = useState(initialSupervisor)
   const [selectedEscuela, setSelectedEscuela] = useState<Escuela | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(initialPage)
   const [isSearching, setIsSearching] = useState(false)
-  const itemsPerPage = 50 // Aumentamos a 50 para mejor rendimiento con muchas escuelas
+  const itemsPerPage = 5 // Reducido a 5 escuelas por página según requerimiento
 
-  // Actualizar la URL cuando cambia la búsqueda o la página
+  // Actualizar la URL cuando cambian los filtros o la página
   useEffect(() => {
     // Crear un nuevo objeto URLSearchParams
     const params = new URLSearchParams()
 
     // Añadir parámetros solo si tienen valor
     if (searchTerm) params.set("q", searchTerm)
+    if (supervisor) params.set("supervisor", supervisor)
     if (currentPage > 1) params.set("page", currentPage.toString())
 
     // Actualizar la URL sin recargar la página
     const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ""}`
     window.history.replaceState({}, "", newUrl)
-  }, [searchTerm, currentPage])
+  }, [searchTerm, supervisor, currentPage])
 
   // Filtrar escuelas con useMemo para evitar recálculos innecesarios
   const filteredEscuelas = useMemo(() => {
-    return filtrarEscuelas(escuelas, searchTerm)
-  }, [escuelas, searchTerm])
+    return filtrarEscuelas(escuelas, searchTerm, supervisor)
+  }, [escuelas, searchTerm, supervisor])
 
   // Añadir este useEffect después de la definición de filteredEscuelas
   useEffect(() => {
@@ -69,7 +70,7 @@ export default function EscuelasClient({ initialEscuelas }: EscuelasClientProps)
     }, 300)
 
     return () => clearTimeout(timer)
-  }, [searchTerm])
+  }, [searchTerm, supervisor])
 
   // Paginación con useMemo
   const { escuelasPaginadas, totalPaginas } = useMemo(
@@ -77,13 +78,17 @@ export default function EscuelasClient({ initialEscuelas }: EscuelasClientProps)
     [filteredEscuelas, currentPage, itemsPerPage],
   )
 
-  // Resetear la página cuando cambia el término de búsqueda
+  // Resetear la página cuando cambian los filtros
   useEffect(() => {
     setCurrentPage(1)
-  }, [searchTerm])
+  }, [searchTerm, supervisor])
 
   const handleSearch = useCallback((term: string) => {
     setSearchTerm(term)
+  }, [])
+
+  const handleSupervisorChange = useCallback((value: string) => {
+    setSupervisor(value)
   }, [])
 
   const handleOpenModal = useCallback((escuela: Escuela) => {
@@ -106,21 +111,41 @@ export default function EscuelasClient({ initialEscuelas }: EscuelasClientProps)
     window.scrollTo({ top: 0, behavior: "smooth" })
   }, [])
 
+  const handleReset = useCallback(() => {
+    setSearchTerm("")
+    setSupervisor("")
+    setCurrentPage(1)
+  }, [])
+
   return (
     <>
-      <Header />
-
       <div className="container mx-auto px-4 py-8 space-y-8">
-        <SearchBar onSearch={handleSearch} initialTerm={searchTerm} />
+        <SearchBar
+          onSearch={handleSearch}
+          onSupervisorChange={handleSupervisorChange}
+          initialTerm={searchTerm}
+          initialSupervisor={supervisor}
+        />
 
         {/* Información de resultados */}
         <div className="text-center text-sm text-gray-600">
           {isSearching ? (
             <p>Buscando...</p>
-          ) : searchTerm ? (
+          ) : searchTerm || supervisor ? (
             <p>
-              Se encontraron <span className="font-semibold text-verde">{filteredEscuelas.length}</span> resultados para
-              "<span className="font-medium">{searchTerm}</span>"
+              Se encontraron <span className="font-semibold text-verde">{filteredEscuelas.length}</span> resultados
+              {searchTerm && (
+                <span>
+                  {" "}
+                  para "<span className="font-medium">{searchTerm}</span>"
+                </span>
+              )}
+              {supervisor && (
+                <span>
+                  {" "}
+                  con supervisor <span className="font-medium">{supervisor}</span>
+                </span>
+              )}
             </p>
           ) : (
             <p>Mostrando todas las escuelas ({escuelas.length})</p>
@@ -147,13 +172,18 @@ export default function EscuelasClient({ initialEscuelas }: EscuelasClientProps)
             </motion.div>
 
             <Pagination currentPage={currentPage} totalPages={totalPaginas} onPageChange={handlePageChange} />
+
+            {/* Información de paginación */}
+            <div className="text-center text-sm text-gray-600">
+              <p>
+                Mostrando {(currentPage - 1) * itemsPerPage + 1} -{" "}
+                {Math.min(currentPage * itemsPerPage, filteredEscuelas.length)} de {filteredEscuelas.length} escuelas
+              </p>
+            </div>
           </>
         ) : (
-          <NoResults searchTerm={searchTerm} onReset={() => handleSearch("")} />
+          <NoResults searchTerm={searchTerm} supervisor={supervisor} onReset={handleReset} />
         )}
-
-        {/* Sección de Estadísticas */}
-        <EstadisticasSection escuelas={escuelas} />
       </div>
 
       <AnimatePresence>

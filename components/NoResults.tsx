@@ -4,10 +4,11 @@ import { Search } from "lucide-react"
 
 interface NoResultsProps {
   searchTerm: string
+  supervisor?: string
   onReset: () => void
 }
 
-export default function NoResults({ searchTerm, onReset }: NoResultsProps) {
+export default function NoResults({ searchTerm, supervisor, onReset }: NoResultsProps) {
   return (
     <div className="text-center py-10 bg-gray-50 rounded-xl p-8 mt-4">
       <div className="text-gray-400 mb-3">
@@ -15,9 +16,21 @@ export default function NoResults({ searchTerm, onReset }: NoResultsProps) {
       </div>
       <h3 className="text-xl font-semibold text-gray-700 mb-2">No se encontraron escuelas</h3>
       <p className="text-gray-600 mb-4">
-        No hay resultados para "<span className="font-medium">{searchTerm}</span>".
+        No hay resultados
+        {searchTerm && (
+          <span>
+            {" "}
+            para "<span className="font-medium">{searchTerm}</span>"
+          </span>
+        )}
+        {supervisor && (
+          <span>
+            {" "}
+            con supervisor <span className="font-medium">{supervisor}</span>
+          </span>
+        )}
       </p>
-      <p className="text-gray-500 text-sm mb-4">Intente con otros términos o verifique la ortografía.</p>
+      <p className="text-gray-500 text-sm mb-4">Intente con otros términos o verifique los filtros aplicados.</p>
       <button
         onClick={onReset}
         className="px-4 py-2 bg-verde text-white rounded-lg hover:bg-verde/90 transition-colors"

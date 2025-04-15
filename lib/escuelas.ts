@@ -1,9 +1,23 @@
 import type { Escuela } from "@/types/escuela"
+import { supervisoresPorLocalidad } from "@/types/escuela"
 import escuelasData from "@/data/escuelas.json"
 
 // Función para obtener todas las escuelas (usado en getStaticProps)
 export function getAllEscuelas(): Escuela[] {
-  return escuelasData
+  // Asignar supervisores a cada escuela basado en su localidad
+  const escuelasConSupervisores = escuelasData.map((escuela: Escuela) => {
+    // Obtener los supervisores para la localidad de la escuela
+    const supervisores = supervisoresPorLocalidad[escuela.localidad] || []
+
+    // Asignar el primer supervisor como supervisor principal (simplificación)
+    // En un caso real, esto podría ser más complejo y requerir datos adicionales
+    return {
+      ...escuela,
+      supervisor: supervisores.length > 0 ? supervisores[0] : undefined,
+    }
+  })
+
+  return escuelasConSupervisores
 }
 
 // Función para normalizar texto (eliminar acentos, convertir a minúsculas)
@@ -15,31 +29,49 @@ export function normalizarTexto(texto: string): string {
     .trim()
 }
 
-// Función mejorada para filtrar escuelas por término de búsqueda
-export function filtrarEscuelas(escuelas: Escuela[], termino: string): Escuela[] {
-  if (!termino.trim()) {
-    return escuelas
+// Función mejorada para filtrar escuelas por término de búsqueda y supervisor
+export function filtrarEscuelas(escuelas: Escuela[], termino: string, supervisor = ""): Escuela[] {
+  let escuelasFiltradas = [...escuelas]
+
+  // Filtrar por término de búsqueda si existe
+  if (termino.trim()) {
+    const terminoNormalizado = normalizarTexto(termino)
+
+    escuelasFiltradas = escuelasFiltradas.filter((escuela) => {
+      // Buscar en múltiples campos para mejorar los resultados
+      const nombreNormalizado = normalizarTexto(escuela.nombre)
+      const cueString = escuela.cue.toString()
+      const directorNormalizado = escuela.director ? normalizarTexto(escuela.director) : ""
+      const localidadNormalizada = escuela.localidad ? normalizarTexto(escuela.localidad) : ""
+      const departamentoNormalizado = escuela.departamento ? normalizarTexto(escuela.departamento) : ""
+
+      // Verificar si el término de búsqueda está en cualquiera de los campos
+      return (
+        nombreNormalizado.includes(terminoNormalizado) ||
+        cueString.includes(terminoNormalizado) ||
+        directorNormalizado.includes(terminoNormalizado) ||
+        localidadNormalizada.includes(terminoNormalizado) ||
+        departamentoNormalizado.includes(terminoNormalizado)
+      )
+    })
   }
 
-  const terminoNormalizado = normalizarTexto(termino)
+  // Filtrar por supervisor si se ha seleccionado uno
+  if (supervisor) {
+    escuelasFiltradas = escuelasFiltradas.filter((escuela) => {
+      // Verificar si la escuela tiene el supervisor seleccionado
+      // Primero verificamos el supervisor principal
+      if (escuela.supervisor === supervisor) {
+        return true
+      }
 
-  return escuelas.filter((escuela) => {
-    // Buscar en múltiples campos para mejorar los resultados
-    const nombreNormalizado = normalizarTexto(escuela.nombre)
-    const cueString = escuela.cue.toString()
-    const directorNormalizado = escuela.director ? normalizarTexto(escuela.director) : ""
-    const localidadNormalizada = escuela.localidad ? normalizarTexto(escuela.localidad) : ""
-    const departamentoNormalizado = escuela.departamento ? normalizarTexto(escuela.departamento) : ""
+      // También verificamos en la lista de supervisores de la localidad
+      const supervisoresLocalidad = supervisoresPorLocalidad[escuela.localidad] || []
+      return supervisoresLocalidad.includes(supervisor)
+    })
+  }
 
-    // Verificar si el término de búsqueda está en cualquiera de los campos
-    return (
-      nombreNormalizado.includes(terminoNormalizado) ||
-      cueString.includes(terminoNormalizado) ||
-      directorNormalizado.includes(terminoNormalizado) ||
-      localidadNormalizada.includes(terminoNormalizado) ||
-      departamentoNormalizado.includes(terminoNormalizado)
-    )
-  })
+  return escuelasFiltradas
 }
 
 // Función para paginar escuelas
