@@ -8,6 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { todosSupervisores } from "@/types/escuela"
 import type { Escuela } from "@/types/escuela"
 import escuelasData from "@/data/escuelas.json"
+import { filtrarEscuelas } from "@/lib/escuelas"
+
+// Asegurar que los datos estén tipados correctamente
+const escuelas: Escuela[] = escuelasData as Escuela[]
 
 // Texto placeholder que será reemplazado por el análisis generado por IA
 const placeholderText = ""
@@ -18,8 +22,8 @@ const supervisorSpecificText = ""
 // Función para obtener las problemáticas de las escuelas
 function obtenerProblematicasPorSupervisor(supervisor: string) {
   const escuelasFiltradas = supervisor === "all" 
-    ? escuelasData 
-    : escuelasData.filter((escuela: Escuela) => escuela.supervisor === supervisor)
+    ? escuelas 
+    : filtrarEscuelas(escuelas, "", supervisor)
 
   return escuelasFiltradas.map((escuela: Escuela) => ({
     nombre: escuela.nombre,
