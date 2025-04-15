@@ -52,15 +52,15 @@ async function generateGeminiInsight(supervisor: string) {
     const prompt = supervisor === "all"
       ? `Analiza las siguientes problemáticas reportadas en las escuelas y genera un análisis conciso con el siguiente formato:
 
-ESCUELAS CON PROBLEMÁTICAS CRÍTICAS:
+<u>ESCUELAS CON PROBLEMÁTICAS CRÍTICAS:</u>
 
 1. <strong>Nombre de la escuela</strong>
-   - Problemática principal
-   - Impacto
+   - <b>Problemática principal</b>
+   - <b>Impacto</b>
 
 2. <strong>Nombre de la escuela</strong>
-   - Problemática principal
-   - Impacto
+   - <b>Problemática principal</b>
+   - <b>Impacto</b>
 
 (Continuar con máximo 5 escuelas)
 
@@ -73,19 +73,19 @@ Requisitos:
 - Incluye solo la información más relevante
 - NO uses asteriscos (**) para el formato
 - Usa <strong> SOLO para los nombres de las escuelas
-- NO uses <strong> en las problemáticas o impactos
+- NO uses <strong> en las problemáticas o impactos, utiliza <b> en su lugar
 - Los nombres de escuelas deben estar en negrita usando <strong>`
       : `Analiza las problemáticas específicas para las escuelas del supervisor ${supervisor} y genera un análisis conciso con el siguiente formato:
 
-ESCUELAS CON PROBLEMÁTICAS CRÍTICAS:
+<u>ESCUELAS CON PROBLEMÁTICAS CRÍTICAS:</u>
 
 1. <strong>Nombre de la escuela</strong>
-   - Problemática principal
-   - Impacto
+   - <b>Problemática principal</b>
+   - <b>Impacto</b>
 
 2. <strong>Nombre de la escuela</strong>
-   - Problemática principal
-   - Impacto
+   - <b>Problemática principal</b>
+   - <b>Impacto</b>
 
 (Continuar con máximo 5 escuelas)
 
@@ -98,7 +98,7 @@ Requisitos:
 - Incluye solo la información más relevante
 - NO uses asteriscos (**) para el formato
 - Usa <strong> SOLO para los nombres de las escuelas
-- NO uses <strong> en las problemáticas o impactos
+- NO uses <strong> en las problemáticas o impactos, utiliza <b> en su lugar
 - Los nombres de escuelas deben estar en negrita usando <strong>`
 
     const response = await fetch('/api/gemini', {

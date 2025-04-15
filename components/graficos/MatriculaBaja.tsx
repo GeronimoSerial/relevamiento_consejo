@@ -102,18 +102,14 @@ EscuelaCard.displayName = 'EscuelaCard';
 // Componente principal memoizado
 function MatriculaBaja({ escuelas }: MatriculaBajaProps) {
   const { data, escuelasDebajoMinimo } = useMemo(() => {
-    const estadisticas = escuelas.reduce((acc, escuela) => {
-      const resultado = validarRatio(escuela);
-      acc[resultado.estado] = (acc[resultado.estado] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-
     const escuelasDebajoMinimo = escuelas
       .map((escuela, index) => {
         const resultado = validarRatio(escuela);
         if (!escuela.matricula2025 || !escuela.cantidadDocenGrado) return null;
         
-        const porcentaje = (resultado.ratio / resultado.minimoEsperado) * 100;
+        const porcentaje = resultado.ratio > 0 
+          ? (resultado.ratio / resultado.minimoEsperado) * 100 
+          : 0;
         
         return {
           ...escuela,
@@ -128,6 +124,14 @@ function MatriculaBaja({ escuelas }: MatriculaBajaProps) {
         escuela !== null && escuela.estado === 'debajo'
       )
       .sort((a, b) => a.porcentaje - b.porcentaje);
+
+    // Calcular estadísticas solo para escuelas con datos completos
+    const estadisticas = escuelas.reduce((acc, escuela) => {
+      if (!escuela.matricula2025 || !escuela.cantidadDocenGrado) return acc;
+      const resultado = validarRatio(escuela);
+      acc[resultado.estado] = (acc[resultado.estado] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
 
     return {
       data: [

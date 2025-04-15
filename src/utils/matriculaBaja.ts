@@ -16,8 +16,19 @@ export function validarRatio(escuela: Escuela): ResultadoValidacion {
     };
   }
 
+  // Convertir a número (funciona tanto para números como para strings numéricos)
   const matricula = Number(escuela.matricula2025);
   const docentes = Number(escuela.cantidadDocenGrado);
+
+  // Si la conversión falla, retornar como debajo del mínimo
+  if (isNaN(matricula) || isNaN(docentes) || docentes === 0) {
+    return {
+      estado: 'debajo',
+      ratio: 0,
+      minimoEsperado: 20
+    };
+  }
+
   const ratio = matricula / docentes;
 
   // Determinar el mínimo esperado según la categoría y zona
