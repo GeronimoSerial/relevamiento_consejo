@@ -31,6 +31,19 @@ function obtenerProblematicasPorSupervisor(supervisor: string) {
   }))
 }
 
+// Función para limpiar el texto y convertir markdown a HTML
+function limpiarTexto(texto: string): string {
+  // Primero convertimos los títulos de escuelas que usan **
+  texto = texto.replace(/\d+\.\s*\*\*(.*?)\*\*/g, (match, p1) => {
+    return match.replace(/\*\*(.*?)\*\*/, '<strong>$1</strong>');
+  });
+  
+  // Luego eliminamos cualquier otro uso de **
+  texto = texto.replace(/\*\*(.*?)\*\*/g, '$1');
+  
+  return texto;
+}
+
 // Función para llamar a la API de Gemini
 async function generateGeminiInsight(supervisor: string) {
   try {
@@ -58,8 +71,10 @@ Requisitos:
 - Enfócate en los problemas más urgentes
 - Usa lenguaje claro y directo
 - Incluye solo la información más relevante
-- No uses asteriscos (*)
-- Nombres de escuelas en negrita usando <strong>`
+- NO uses asteriscos (**) para el formato
+- Usa <strong> SOLO para los nombres de las escuelas
+- NO uses <strong> en las problemáticas o impactos
+- Los nombres de escuelas deben estar en negrita usando <strong>`
       : `Analiza las problemáticas específicas para las escuelas del supervisor ${supervisor} y genera un análisis conciso con el siguiente formato:
 
 ESCUELAS CON PROBLEMÁTICAS CRÍTICAS:
@@ -81,8 +96,10 @@ Requisitos:
 - Enfócate en los problemas más urgentes
 - Usa lenguaje claro y directo
 - Incluye solo la información más relevante
-- No uses asteriscos (*)
-- Nombres de escuelas en negrita usando <strong>`
+- NO uses asteriscos (**) para el formato
+- Usa <strong> SOLO para los nombres de las escuelas
+- NO uses <strong> en las problemáticas o impactos
+- Los nombres de escuelas deben estar en negrita usando <strong>`
 
     const response = await fetch('/api/gemini', {
       method: 'POST',
@@ -97,7 +114,7 @@ Requisitos:
     }
 
     const data = await response.json()
-    return data.text
+    return limpiarTexto(data.text)
   } catch (error) {
     console.error('Error al generar insight:', error)
     return 'Lo sentimos, hubo un error al generar el análisis. Por favor, intente nuevamente.'
@@ -189,20 +206,24 @@ export default function AIInsights({}: AIInsightsProps) {
 
         <div className="px-6 pt-4 pb-2 border-t border-gray-100">
           <div className="flex items-center space-x-2">
-            <UserCheck className="h-5 w-5 text-verde" />
+            <UserCheck className="h-5 w-5 text-verde" aria-hidden="true" />
             <label htmlFor="supervisor-select" className="text-sm font-medium text-gray-700">
               Filtrar análisis por supervisor:
             </label>
             <Select value={selectedSupervisor} onValueChange={handleSupervisorChange} disabled={isLoading}>
-              <SelectTrigger id="supervisor-select" className="w-full max-w-xs bg-white border-gray-300 rounded-xl">
+              <SelectTrigger 
+                id="supervisor-select" 
+                className="w-full max-w-xs bg-white border-gray-300 rounded-xl focus:ring-2 focus:ring-verde focus:border-verde transition-colors"
+                aria-label="Seleccionar supervisor para filtrar el análisis"
+              >
                 <SelectValue placeholder="Seleccionar supervisor" />
               </SelectTrigger>
               <SelectContent className="bg-white">
-                <SelectItem value="all">
+                <SelectItem value="all" className="focus:bg-verde/10">
                   <strong>Análisis General</strong>
                 </SelectItem>
                 {todosSupervisores.sort().map((supervisor) => (
-                  <SelectItem key={supervisor} value={supervisor}>
+                  <SelectItem key={supervisor} value={supervisor} className="focus:bg-verde/10">
                     {supervisor}
                   </SelectItem>
                 ))}
@@ -220,13 +241,22 @@ export default function AIInsights({}: AIInsightsProps) {
 
         <CardContent className="p-6">
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-8">
-              <Brain className="h-12 w-12 text-verde/40 animate-pulse mb-4" />
-              <p className="text-gray-500">
-                {selectedSupervisor === "all"
-                  ? "Generando nuevo análisis..."
-                  : `Generando análisis para ${selectedSupervisor}...`}
-              </p>
+            <div className="flex flex-col items-center justify-center min-h-[300px]">
+              <div className="space-y-4 w-full max-w-2xl">
+                <div className="flex items-center justify-center">
+                  <Brain className="h-12 w-12 text-verde/40 animate-pulse" />
+                </div>
+                <div className="space-y-3">
+                  <div className="h-4 bg-verde/10 rounded w-3/4 mx-auto animate-pulse" />
+                  <div className="h-4 bg-verde/10 rounded w-1/2 mx-auto animate-pulse" />
+                  <div className="h-4 bg-verde/10 rounded w-2/3 mx-auto animate-pulse" />
+                </div>
+                <p className="text-center text-gray-500 mt-4">
+                  {selectedSupervisor === "all"
+                    ? "Generando nuevo análisis..."
+                    : `Generando análisis para ${selectedSupervisor}...`}
+                </p>
+              </div>
             </div>
           ) : (
             <AnimatePresence mode="wait">

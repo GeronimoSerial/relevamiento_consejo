@@ -162,28 +162,37 @@ function EstadisticasContent({ escuelas }: EstadisticasContentProps) {
 
         {/* Tabs para los diferentes gráficos */}
         <Tabs defaultValue="ratio" className="w-full">
-          <TabsList className="grid grid-cols-2 md:grid-cols-6 mb-4 md:mb-6 h-auto">
-            <TabsTrigger value="avance" className="text-xs md:text-sm py-1.5 md:py-2">
+          <TabsList className="grid grid-cols-2 md:grid-cols-6 mb-4 md:mb-6 h-auto gap-2">
+            <TabsTrigger 
+              value="avance" 
+              className="text-xs md:text-sm py-2 md:py-3 px-3 md:px-4 rounded-lg border border-gray-200 hover:bg-gray-50 hover:border-gray-300 data-[state=active]:bg-verde data-[state=active]:text-white data-[state=active]:border-verde transition-colors focus-visible:ring-2 focus-visible:ring-verde focus-visible:ring-offset-2"
+            >
               Avance
             </TabsTrigger>
-            <TabsTrigger value="matricula" className="text-xs md:text-sm py-1.5 md:py-2">
+            <TabsTrigger 
+              value="matricula" 
+              className="text-xs md:text-sm py-2 md:py-3 px-3 md:px-4 rounded-lg border border-gray-200 hover:bg-gray-50 hover:border-gray-300 data-[state=active]:bg-verde data-[state=active]:text-white data-[state=active]:border-verde transition-colors focus-visible:ring-2 focus-visible:ring-verde focus-visible:ring-offset-2"
+            >
               Matrícula
             </TabsTrigger>
-            <TabsTrigger value="categoria" className="text-xs md:text-sm py-1.5 md:py-2">
+            <TabsTrigger 
+              value="categoria" 
+              className="text-xs md:text-sm py-2 md:py-3 px-3 md:px-4 rounded-lg border border-gray-200 hover:bg-gray-50 hover:border-gray-300 data-[state=active]:bg-verde data-[state=active]:text-white data-[state=active]:border-verde transition-colors focus-visible:ring-2 focus-visible:ring-verde focus-visible:ring-offset-2"
+            >
               Categorías
             </TabsTrigger>
-            <TabsTrigger value="edificio" className="text-xs md:text-sm py-1.5 md:py-2">
+            <TabsTrigger 
+              value="edificio" 
+              className="text-xs md:text-sm py-2 md:py-3 px-3 md:px-4 rounded-lg border border-gray-200 hover:bg-gray-50 hover:border-gray-300 data-[state=active]:bg-verde data-[state=active]:text-white data-[state=active]:border-verde transition-colors focus-visible:ring-2 focus-visible:ring-verde focus-visible:ring-offset-2"
+            >
               Edificio
             </TabsTrigger>
-            <TabsTrigger value="ratio" className="text-xs md:text-sm py-1.5 md:py-2">
+            <TabsTrigger 
+              value="ratio" 
+              className="text-xs md:text-sm py-2 md:py-3 px-3 md:px-4 rounded-lg border border-gray-200 hover:bg-gray-50 hover:border-gray-300 data-[state=active]:bg-verde data-[state=active]:text-white data-[state=active]:border-verde transition-colors focus-visible:ring-2 focus-visible:ring-verde focus-visible:ring-offset-2"
+            >
               Matricula Baja
             </TabsTrigger>
-            {/* <TabsTrigger value="internet" className="text-xs md:text-sm py-1.5 md:py-2">
-              Internet
-            </TabsTrigger> */}
-            {/* <TabsTrigger value="programas" className="text-xs md:text-sm py-1.5 md:py-2">
-              Programas
-            </TabsTrigger> */}
           </TabsList>
 
           <TabsContent value="matricula">
