@@ -161,7 +161,7 @@ export default function EscuelasClient({ initialEscuelas }: EscuelasClientProps)
             >
               {escuelasPaginadas.map((escuela, index) => (
                 <motion.div
-                  key={escuela.cue}
+                  key={`${escuela.cue}-${index}`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: Math.min(index * 0.03, 0.3), duration: 0.3 }}

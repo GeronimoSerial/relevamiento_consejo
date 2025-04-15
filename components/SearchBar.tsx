@@ -26,6 +26,11 @@ const SearchBar = memo(function SearchBar({
 
   // Implementar debounce para evitar búsquedas excesivas mientras el usuario escribe
   useEffect(() => {
+    if (searchTerm === "") {
+      onSearch("")
+      return
+    }
+    
     const timer = setTimeout(() => {
       onSearch(searchTerm)
     }, 300) // 300ms de retraso
