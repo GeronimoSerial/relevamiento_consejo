@@ -1,79 +1,131 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Brain, RefreshCw, UserCheck } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { todosSupervisores } from "@/types/escuela"
+import type { Escuela } from "@/types/escuela"
+import escuelasData from "@/data/escuelas.json"
 
 // Texto placeholder que será reemplazado por el análisis generado por IA
-const placeholderText = `
-Basado en los datos analizados, se identifican las siguientes problemáticas prioritarias en el sistema educativo:
-
-1. **Infraestructura deficiente**: El 35% de las escuelas reportan problemas en techos y sistemas eléctricos, principalmente en zonas rurales y periurbanas. Se recomienda priorizar reparaciones en las escuelas de los departamentos Paraná y Concordia.
-
-2. **Conectividad limitada**: Solo el 42% de las instituciones cuentan con conexión a internet de alta velocidad (>50MB), lo que dificulta la implementación de recursos digitales. Las escuelas rurales son las más afectadas, con solo 15% de cobertura adecuada.
-
-3. **Distribución desigual de recursos profesionales**: Se observa una concentración de profesionales de apoyo en escuelas urbanas de categoría 1, mientras que las escuelas rurales y de categoría 3 presentan carencias significativas.
-
-4. **Oportunidades de mejora**: Implementar un programa de mejora de infraestructura focalizado en las 20 escuelas con problemas críticos identificadas en este relevamiento, y expandir el programa de conectividad rural a 15 nuevas escuelas en el próximo trimestre.
-`
+const placeholderText = ""
 
 // Texto alternativo para simular cambios cuando se selecciona un supervisor específico
-const supervisorSpecificText = `
-Análisis específico para el supervisor seleccionado:
+const supervisorSpecificText = ""
 
-1. **Rendimiento comparativo**: Las escuelas bajo su supervisión muestran un 12% más de participación en programas de acompañamiento que el promedio provincial, destacando especialmente en programas de alfabetización.
+// Función para obtener las problemáticas de las escuelas
+function obtenerProblematicasPorSupervisor(supervisor: string) {
+  const escuelasFiltradas = supervisor === "all" 
+    ? escuelasData 
+    : escuelasData.filter((escuela: Escuela) => escuela.supervisor === supervisor)
 
-2. **Áreas de atención**: Se identifican 3 escuelas con problemas críticos de infraestructura que requieren intervención inmediata, particularmente en los techos y sistemas eléctricos.
+  return escuelasFiltradas.map((escuela: Escuela) => ({
+    nombre: escuela.nombre,
+    problematicas: escuela.problematicas
+  }))
+}
 
-3. **Conectividad**: El 38% de las escuelas supervisadas cuentan con conexión a internet adecuada, ligeramente por debajo del promedio provincial (42%). Se recomienda priorizar la mejora de conectividad en las escuelas rurales.
+// Función para llamar a la API de Gemini
+async function generateGeminiInsight(supervisor: string) {
+  try {
+    const problematicas = obtenerProblematicasPorSupervisor(supervisor)
+    
+    const prompt = supervisor === "all"
+      ? `Analiza las siguientes problemáticas reportadas en las escuelas y genera un listado numerado (máximo 5 items) ordenado por prioridad:
 
-4. **Recomendaciones personalizadas**: Implementar un plan de visitas focalizadas a las 5 escuelas con mayor matrícula para evaluar la distribución de recursos profesionales y optimizar su aprovechamiento.
-`
+${JSON.stringify(problematicas, null, 2)}
+
+Formato de respuesta requerido (cada problema debe estar en una línea separada):
+1- Escuela Primaria N° 8 - Instalaciones eléctricas antiguas (Riesgo de incendios y electrocución)
+2- Escuela Primaria N° 1 - Necesidad de reparación en techos (Riesgo de derrumbe)
+...
+
+Enfócate en los problemas más críticos y urgentes.`
+      : `Analiza las problemáticas específicas para las escuelas del supervisor ${supervisor} y genera un listado numerado (máximo 5 items) ordenado por prioridad:
+
+${JSON.stringify(problematicas, null, 2)}
+
+Formato de respuesta requerido (cada problema debe estar en una línea separada):
+1- Escuela Primaria N° 8 - Instalaciones eléctricas antiguas (Riesgo de incendios y electrocución)
+2- Escuela Primaria N° 1 - Necesidad de reparación en techos (Riesgo de derrumbe)
+...
+
+Enfócate en los problemas más críticos y urgentes de las escuelas bajo su supervisión.`
+
+    const response = await fetch('/api/gemini', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt, supervisor })
+    })
+
+    if (!response.ok) {
+      throw new Error('Error en la llamada a la API')
+    }
+
+    const data = await response.json()
+    return data.text
+  } catch (error) {
+    console.error('Error al generar insight:', error)
+    return 'Lo sentimos, hubo un error al generar el análisis. Por favor, intente nuevamente.'
+  }
+}
 
 type AIInsightsProps = {}
 
 export default function AIInsights({}: AIInsightsProps) {
   const [isLoading, setIsLoading] = useState(false)
-  const [insightText, setInsightText] = useState(placeholderText)
+  const [insightText, setInsightText] = useState("")
   const [selectedSupervisor, setSelectedSupervisor] = useState("all")
-  const [key, setKey] = useState(0) // Clave para forzar la re-renderización de la animación
+  const [key, setKey] = useState(0)
 
-  // Esta función simula la regeneración del análisis
-  // En el futuro, aquí se implementaría la llamada real a la IA
-  const handleRegenerateInsight = () => {
+  // Generar análisis automáticamente al cargar el componente
+  useEffect(() => {
+    const generateInitialInsight = async () => {
+      setIsLoading(true)
+      try {
+        const generatedText = await generateGeminiInsight(selectedSupervisor)
+        setInsightText(generatedText)
+      } catch (error) {
+        console.error('Error al generar insight inicial:', error)
+        setInsightText('Lo sentimos, hubo un error al generar el análisis. Por favor, intente nuevamente.')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    generateInitialInsight()
+  }, [])
+
+  const handleRegenerateInsight = async () => {
     setIsLoading(true)
-
-    // Simulación de carga
-    setTimeout(() => {
+    try {
+      const generatedText = await generateGeminiInsight(selectedSupervisor)
+      setInsightText(generatedText)
+    } catch (error) {
+      console.error('Error al regenerar insight:', error)
+      setInsightText('Lo sentimos, hubo un error al generar el análisis. Por favor, intente nuevamente.')
+    } finally {
       setIsLoading(false)
-      // Por ahora solo restablecemos el mismo texto
-      // Aquí se implementaría la lógica para obtener nuevo texto de la IA
-      setInsightText(placeholderText)
-    }, 1500)
+    }
   }
 
-  // Manejar el cambio de supervisor
-  const handleSupervisorChange = (value: string) => {
+  const handleSupervisorChange = async (value: string) => {
     setIsLoading(true)
-
-    // Simulación de carga
-    setTimeout(() => {
+    try {
       setSelectedSupervisor(value)
-      setIsLoading(false)
-
-      // Simular diferentes análisis según el supervisor seleccionado
-      if (value === "all") {
-        setInsightText(placeholderText)
-      } else {
-        setInsightText(supervisorSpecificText.replace("el supervisor seleccionado", value))
-      }
-
-      // Cambiar la clave para forzar la re-renderización de la animación
+      const generatedText = await generateGeminiInsight(value)
+      setInsightText(generatedText)
       setKey((prev) => prev + 1)
-    }, 800)
+    } catch (error) {
+      console.error('Error al cambiar supervisor:', error)
+      setInsightText('Lo sentimos, hubo un error al generar el análisis. Por favor, intente nuevamente.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -156,10 +208,10 @@ export default function AIInsights({}: AIInsightsProps) {
                 transition={{ duration: 0.3 }}
                 className="prose prose-green max-w-none"
               >
-                {insightText.split("\n\n").map((paragraph, index) => (
-                  <p key={index} className="mb-4 text-gray-700 leading-relaxed">
-                    {paragraph}
-                  </p>
+                {insightText.split("\n").map((line, index) => (
+                  <div key={index} className="mb-4 text-gray-700 leading-relaxed">
+                    {line}
+                  </div>
                 ))}
               </motion.div>
             </AnimatePresence>
