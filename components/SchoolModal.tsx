@@ -34,6 +34,7 @@ const SchoolModal = memo(function SchoolModal({ escuela, onClose }: SchoolModalP
         { label: "CUE", value: escuela.cue },
         { label: "Categoría", value: escuela.categoria },
         { label: "Director/a", value: escuela.director },
+        { label: "Zona", value: escuela.zona },
         { label: "Situación de Revista", value: escuela.situacionRevistaDirector},
         { label: "Supervisor/a", value: escuela.supervisor },
         { label: "Fecha de fundación", value: escuela.fechaFundacion },
@@ -46,7 +47,6 @@ const SchoolModal = memo(function SchoolModal({ escuela, onClose }: SchoolModalP
         { label: "Departamento", value: escuela.departamento },
         { label: "Localidad", value: escuela.localidad },
         { label: "Ubicación", value: escuela.ubicacion },
-        { label: "Zona", value: escuela.zona },
       ],
       Organización: [
         { label: "Turno", value: escuela.turno },
