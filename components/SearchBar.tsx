@@ -74,7 +74,7 @@ const SearchBar = memo(function SearchBar({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="max-w-2xl mx-auto space-y-4"
+      className="max-w-4xl mx-auto space-y-4"
     >
       {/* Mensaje de error */}
       {error && (
@@ -90,94 +90,97 @@ const SearchBar = memo(function SearchBar({
         </motion.div>
       )}
 
-      {/* Campo de búsqueda por texto */}
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-          {isLoading ? (
-            <Loader2 className="h-5 w-5 text-verde animate-spin" />
-          ) : (
-            <Search className={`h-5 w-5 ${isFocused ? "text-verde" : "text-gray-500"} transition-colors`} />
+      {/* Contenedor de búsqueda y filtro */}
+      <div className="flex items-center gap-4">
+        {/* Campo de búsqueda por texto */}
+        <div className="relative flex-1">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+            {isLoading ? (
+              <Loader2 className="h-5 w-5 text-verde animate-spin" />
+            ) : (
+              <Search className={`h-5 w-5 ${isFocused ? "text-verde" : "text-gray-500"} transition-colors`} />
+            )}
+          </div>
+
+          <input
+            type="text"
+            aria-label="Buscar escuelas"
+            placeholder="Buscar por nombre, CUE, director, localidad..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') {
+                handleClear()
+              }
+            }}
+            disabled={isLoading}
+            className={`w-full h-12 px-4 pl-12 pr-10 rounded-2xl border ${
+              isFocused ? "border-verde ring-2 ring-verde/20" : "border-gray-300"
+            } focus:outline-none focus:ring-2 ring-verde focus:border-transparent text-gray-700 placeholder-gray-500 shadow-md transition-all ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          />
+
+          {searchTerm && !isLoading && (
+            <button
+              onClick={handleClear}
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
+              aria-label="Limpiar búsqueda"
+            >
+              <X className="h-5 w-5" />
+            </button>
           )}
         </div>
 
-        <input
-          type="text"
-          aria-label="Buscar escuelas"
-          placeholder="Buscar por nombre, CUE, director, localidad..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          onKeyDown={(e) => {
-            if (e.key === 'Escape') {
-              handleClear()
-            }
-          }}
-          disabled={isLoading}
-          className={`w-full px-4 py-3 pl-12 pr-10 rounded-2xl border ${
-            isFocused ? "border-verde ring-2 ring-verde/20" : "border-gray-300"
-          } focus:outline-none focus:ring-2 ring-verde focus:border-transparent text-gray-700 placeholder-gray-500 shadow-md transition-all ${
-            isLoading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-        />
-
-        {searchTerm && !isLoading && (
-          <button
-            onClick={handleClear}
-            className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
-            aria-label="Limpiar búsqueda"
+        {/* Filtro por supervisor */}
+        <div className="w-64">
+          <Select 
+            value={supervisor} 
+            onValueChange={handleSupervisorChange} 
+            disabled={isLoading}
+            aria-label="Filtrar por supervisor"
           >
-            <X className="h-5 w-5" />
-          </button>
-        )}
-      </div>
-
-      {/* Filtro por supervisor */}
-      <div className="relative">
-        <Select 
-          value={supervisor} 
-          onValueChange={handleSupervisorChange} 
-          disabled={isLoading}
-          aria-label="Filtrar por supervisor"
-        >
-          <SelectTrigger 
-            className={`w-full bg-white border-gray-300 rounded-xl shadow-md transition-all duration-200
-              ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
-              hover:border-verde hover:ring-2 hover:ring-verde/20
-              focus:border-verde focus:ring-2 focus:ring-verde/20
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-verde/20
-              disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-300
-            `}
-            aria-disabled={isLoading}
-          >
-            <div className="flex items-center space-x-2">
-              <UserCheck className="h-5 w-5 text-gray-600" aria-hidden="true" />
-              <SelectValue placeholder="Filtrar por supervisor" />
-            </div>
-          </SelectTrigger>
-          <SelectContent 
-            className="bg-white border-gray-200 shadow-lg rounded-xl"
-            position="popper"
-          >
-            <SelectItem 
-              value="all"
-              aria-label="Todos los supervisores"
-              className="focus:bg-verde/10 focus:text-verde data-[state=checked]:bg-verde/10 data-[state=checked]:text-verde"
+            <SelectTrigger 
+              className={`h-12 w-full bg-white border-gray-300 rounded-xl shadow-md transition-all duration-200
+                ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
+                hover:border-verde hover:ring-2 hover:ring-verde/20
+                focus:border-verde focus:ring-2 focus:ring-verde/20
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-verde/20
+                disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-300
+              `}
+              aria-disabled={isLoading}
             >
-              Todos los supervisores
-            </SelectItem>
-            {sortedSupervisors.map((supervisor) => (
+              <div className="flex items-center space-x-2">
+                <UserCheck className="h-5 w-5 text-gray-600" aria-hidden="true" />
+                <SelectValue placeholder="Filtrar por supervisor" />
+              </div>
+            </SelectTrigger>
+            <SelectContent 
+              className="bg-white border-gray-200 shadow-lg rounded-xl"
+              position="popper"
+            >
               <SelectItem 
-                key={supervisor} 
-                value={supervisor}
-                aria-label={`Supervisor ${supervisor}`}
+                value="all"
+                aria-label="Todos los supervisores"
                 className="focus:bg-verde/10 focus:text-verde data-[state=checked]:bg-verde/10 data-[state=checked]:text-verde"
               >
-                {supervisor}
+                Todos los supervisores
               </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+              {sortedSupervisors.map((supervisor) => (
+                <SelectItem 
+                  key={supervisor} 
+                  value={supervisor}
+                  aria-label={`Supervisor ${supervisor}`}
+                  className="focus:bg-verde/10 focus:text-verde data-[state=checked]:bg-verde/10 data-[state=checked]:text-verde"
+                >
+                  {supervisor}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Mensaje de información */}
