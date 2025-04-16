@@ -40,7 +40,7 @@ export default function EscuelasClient({ initialEscuelas }: EscuelasClientProps)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(initialPage)
   const [isSearching, setIsSearching] = useState(false)
-  const itemsPerPage = 5 // Reducido a 5 escuelas por página según requerimiento
+  const itemsPerPage = 6 // Cambiado de 5 a 6 escuelas por página
 
   // Actualizar la URL cuando cambian los filtros o la página
   useEffect(() => {

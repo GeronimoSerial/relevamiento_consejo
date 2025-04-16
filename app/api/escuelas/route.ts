@@ -13,7 +13,14 @@ export async function GET(request: Request) {
   const search = searchParams.get("q") || ""
 
   // Filtrar escuelas si hay término de búsqueda
-  let filteredEscuelas: Escuela[] = [...escuelasData]
+  let filteredEscuelas: Escuela[] = escuelasData.map(escuela => ({
+    ...escuela,
+    DocenEspeciales: escuela.DocenEspeciales?.toString(),
+    fechaFundacion2: Number(escuela.fechaFundacion2),
+    matricula2025: Number(escuela.matricula2025),
+    matricula2024: Number(escuela.matricula2024),
+    problematicas: escuela.problematicas?.toString()
+  }))
 
   if (search) {
     const searchNormalizado = normalizarTexto(search)

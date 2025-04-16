@@ -19,28 +19,28 @@ const LeyendaMinimos = memo(() => (
       <div>
         <p className="font-medium">Categoría 1:</p>
         <ul className="ml-4 space-y-1 text-gray-600">
-          <li>• Zonas A y B: 20 alumnos</li>
-          <li>• Zonas C y D: 15 alumnos</li>
-          <li>• Zona E: 8 alumnos</li>
+          <li>• Zonas A y B: 20 alumnos por grado</li>
+          <li>• Zonas C y D: 15 alumnos por grado</li>
+          <li>• Zona E: 8 alumnos por grado</li>
         </ul>
       </div>
       <div>
         <p className="font-medium">Categoría 2:</p>
         <ul className="ml-4 space-y-1 text-gray-600">
-          <li>• Zonas A y B: 15 alumnos</li>
-          <li>• Zonas C, D y E: 12 alumnos</li>
+          <li>• Zonas A y B: 15 alumnos por grado</li>
+          <li>• Zonas C, D y E: 12 alumnos por grado</li>
         </ul>
       </div>
       <div>
         <p className="font-medium">Categoría 3:</p>
         <ul className="ml-4 space-y-1 text-gray-600">
-          <li>• Todas las zonas: 12 alumnos</li>
+          <li>• Todas las zonas: 12 alumnos por grado</li>
         </ul>
       </div>
       <div>
         <p className="font-medium">Categoría 4:</p>
         <ul className="ml-4 space-y-1 text-gray-600">
-          <li>• Todas las zonas: Sección unica: Hasta 24 alumnos</li>
+          <li>• Todas las zonas: Sección única: Hasta 24 alumnos por grado</li>
         </ul>
       </div>
     </div>
@@ -51,13 +51,13 @@ LeyendaMinimos.displayName = 'LeyendaMinimos';
 
 // Componente para la tarjeta de escuela
 const EscuelaCard = memo(({ escuela }: { escuela: Escuela & { ratio: number; minimoEsperado: number; porcentaje: number; id: string } }) => (
-  <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
-      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-        <p className="text-gray-800 font-medium">
+  <div className="p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200">
+    <div className="flex flex-col gap-2 mb-2">
+      <div className="flex flex-col gap-2">
+        <p className="text-gray-800 font-medium break-words">
           {escuela.nombre} <span className="text-gray-500 font-normal">(CUE: {escuela.cue})</span>
         </p>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {escuela.categoria && (
             <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-md text-xs font-medium">
               Categoria: {escuela.categoria}
@@ -70,15 +70,15 @@ const EscuelaCard = memo(({ escuela }: { escuela: Escuela & { ratio: number; min
           )}
         </div>
       </div>
-      <div className="flex flex-col items-end">
-        <p className="text-sm whitespace-nowrap">
+      <div className="flex flex-col">
+        <p className="text-sm">
           <span className="text-red-500 font-medium">Promedio {Math.round(escuela.ratio)} alumnos</span>
           <span className="text-gray-500"> de </span>
           <span className="text-green-600 font-medium">{escuela.minimoEsperado}</span>
           <span className="text-gray-500"> esperados</span>
         </p>
         <p className="text-xs text-gray-500">
-          ({escuela.matricula2025} / {escuela.cantidadDocenGrado} = {escuela.ratio.toFixed(1)})
+          ({escuela.matricula2025} alumnos / {escuela.cantidadDocenGrado} docente(s) = {escuela.ratio.toFixed(1)})
         </p>
       </div>
     </div>
@@ -91,7 +91,7 @@ const EscuelaCard = memo(({ escuela }: { escuela: Escuela & { ratio: number; min
         }}
       />
     </div>
-    <p className="text-sm text-gray-500">
+    <p className="text-sm text-gray-500 break-words">
       {escuela.departamento} - {escuela.localidad}
     </p>
   </div>
@@ -209,13 +209,12 @@ function MatriculaBaja({ escuelas }: MatriculaBajaProps) {
       </div>
 
       {escuelasDebajoMinimo.length > 0 && (
-        <div className="bg-white rounded-lg shadow p-4">
+        <div className="bg-white rounded-lg shadow p-3 sm:p-4">
           <h3 className="text-lg font-semibold mb-4">
             Escuelas por debajo del mínimo ({escuelasDebajoMinimo.length})
           </h3>
-          <div className="max-h-[400px] overflow-y-auto pr-2 space-y-3 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          <div className="max-h-[400px] overflow-y-auto space-y-3 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
             {escuelasDebajoMinimo.map((escuela) => {
-              // Ensure minimoEsperado is a number
               const escuelaWithNumberMinimo = {
                 ...escuela,
                 minimoEsperado: Array.isArray(escuela.minimoEsperado) 
