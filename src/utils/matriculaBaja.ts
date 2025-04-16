@@ -8,7 +8,7 @@ interface ResultadoValidacion {
 
 export function validarRatio(escuela: Escuela): ResultadoValidacion {
   // Verificar si tenemos los datos necesarios
-  if (!escuela.matricula2025 || !escuela.cantidadDocenGrado || escuela.cantidadDocenGrado === 0) {
+  if (!escuela.cantidadDocenGrado || escuela.cantidadDocenGrado === 0) {
     return {
       estado: 'debajo',
       ratio: 0,
@@ -17,7 +17,7 @@ export function validarRatio(escuela: Escuela): ResultadoValidacion {
   }
 
   // Convertir a número (funciona tanto para números como para strings numéricos)
-  const matricula = Number(escuela.matricula2025);
+  const matricula = Number(escuela.matricula2025) || 0;
   const docentes = Number(escuela.cantidadDocenGrado);
 
   // Si la conversión falla, retornar como debajo del mínimo
@@ -55,7 +55,9 @@ export function validarRatio(escuela: Escuela): ResultadoValidacion {
   // Determinar el estado
   let estado: 'debajo' | 'cerca' | 'minimo' | 'arriba' = 'debajo';
   
-  if (ratio < minimoEsperado) {
+  if (matricula === 0) {
+    estado = 'debajo'; // Máxima advertencia para matrícula 0
+  } else if (ratio < minimoEsperado) {
     const diferencia = minimoEsperado - ratio;
     const porcentajeDiferencia = (diferencia / minimoEsperado) * 100;
     estado = porcentajeDiferencia <= 10 ? 'cerca' : 'debajo';

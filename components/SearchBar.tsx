@@ -135,17 +135,43 @@ const SearchBar = memo(function SearchBar({
       {/* Filtro por supervisor */}
       <div className="relative">
         <div className="flex items-center space-x-2">
-          <UserCheck className="h-5 w-5 text-gray-500" />
-          <Select value={supervisor} onValueChange={handleSupervisorChange} disabled={isLoading}>
-            <SelectTrigger className={`w-full bg-white border-gray-300 rounded-xl shadow-md ${
-              isLoading ? "opacity-50 cursor-not-allowed" : ""
-            }`}>
+          <UserCheck className="h-5 w-5 text-gray-600" aria-hidden="true" />
+          <Select 
+            value={supervisor} 
+            onValueChange={handleSupervisorChange} 
+            disabled={isLoading}
+            aria-label="Filtrar por supervisor"
+          >
+            <SelectTrigger 
+              className={`w-full bg-white border-gray-300 rounded-xl shadow-md transition-all duration-200
+                ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
+                hover:border-verde hover:ring-2 hover:ring-verde/20
+                focus:border-verde focus:ring-2 focus:ring-verde/20
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-verde/20
+                disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-300
+              `}
+              aria-disabled={isLoading}
+            >
               <SelectValue placeholder="Filtrar por supervisor" />
             </SelectTrigger>
-            <SelectContent className="bg-white">
-              <SelectItem value="all">Todos los supervisores</SelectItem>
+            <SelectContent 
+              className="bg-white border-gray-200 shadow-lg rounded-xl"
+              position="popper"
+            >
+              <SelectItem 
+                value="all"
+                aria-label="Todos los supervisores"
+                className="focus:bg-verde/10 focus:text-verde data-[state=checked]:bg-verde/10 data-[state=checked]:text-verde"
+              >
+                Todos los supervisores
+              </SelectItem>
               {sortedSupervisors.map((supervisor) => (
-                <SelectItem key={supervisor} value={supervisor}>
+                <SelectItem 
+                  key={supervisor} 
+                  value={supervisor}
+                  aria-label={`Supervisor ${supervisor}`}
+                  className="focus:bg-verde/10 focus:text-verde data-[state=checked]:bg-verde/10 data-[state=checked]:text-verde"
+                >
                   {supervisor}
                 </SelectItem>
               ))}

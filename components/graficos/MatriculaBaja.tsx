@@ -105,7 +105,7 @@ function MatriculaBaja({ escuelas }: MatriculaBajaProps) {
     const escuelasDebajoMinimo = escuelas
       .map((escuela, index) => {
         const resultado = validarRatio(escuela);
-        if (!escuela.matricula2025 || !escuela.cantidadDocenGrado) return null;
+        if (!escuela.cantidadDocenGrado) return null;
         
         const porcentaje = resultado.ratio > 0 
           ? (resultado.ratio / resultado.minimoEsperado) * 100 
@@ -123,11 +123,17 @@ function MatriculaBaja({ escuelas }: MatriculaBajaProps) {
       .filter((escuela): escuela is NonNullable<typeof escuela> => 
         escuela !== null && escuela.estado === 'debajo'
       )
-      .sort((a, b) => a.porcentaje - b.porcentaje);
+      .sort((a, b) => {
+        // Primero ordenar por matrícula 0
+        if (a.matricula2025 === 0 && b.matricula2025 !== 0) return -1;
+        if (a.matricula2025 !== 0 && b.matricula2025 === 0) return 1;
+        // Luego por porcentaje
+        return a.porcentaje - b.porcentaje;
+      });
 
-    // Calcular estadísticas solo para escuelas con datos completos
+    // Calcular estadísticas incluyendo escuelas con matrícula 0
     const estadisticas = escuelas.reduce((acc, escuela) => {
-      if (!escuela.matricula2025 || !escuela.cantidadDocenGrado) return acc;
+      if (!escuela.cantidadDocenGrado) return acc;
       const resultado = validarRatio(escuela);
       acc[resultado.estado] = (acc[resultado.estado] || 0) + 1;
       return acc;
