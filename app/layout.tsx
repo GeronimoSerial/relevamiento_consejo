@@ -6,7 +6,7 @@ import ErrorBoundary from "@/components/ErrorBoundary"
 const montserrat = Montserrat({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Sistema de Relevamiento de Gráficos",
+  title: "Sistema de Relevamiento Escolar",
   description: "Consejo General de Educación - Centro de Cómputos",
 }
 

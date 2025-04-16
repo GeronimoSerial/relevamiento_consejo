@@ -1,4 +1,4 @@
-# Sistema de Relevamiento de Gráficos
+# Sistema de Relevamiento Escolar
 
 Este proyecto es una aplicación web desarrollada con Next.js para el análisis y visualización de datos basados en el relevamiento escolar Correntino.
 

@@ -91,9 +91,9 @@ const SearchBar = memo(function SearchBar({
       )}
 
       {/* Contenedor de búsqueda y filtro */}
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row items-center gap-4">
         {/* Campo de búsqueda por texto */}
-        <div className="relative flex-1">
+        <div className="relative w-full sm:flex-1">
           <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
             {isLoading ? (
               <Loader2 className="h-5 w-5 text-verde animate-spin" />
@@ -135,7 +135,7 @@ const SearchBar = memo(function SearchBar({
         </div>
 
         {/* Filtro por supervisor */}
-        <div className="w-64">
+        <div className="w-full sm:w-64">
           <Select 
             value={supervisor} 
             onValueChange={handleSupervisorChange} 
