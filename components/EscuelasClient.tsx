@@ -4,13 +4,6 @@ import { useState, useEffect, useCallback, useMemo } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import dynamic from "next/dynamic"
-import { PartyPopper } from "lucide-react"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 import SearchBar from "@/components/SearchBar"
 import SchoolCard from "@/components/SchoolCard"
 import Pagination from "@/components/Pagination"
@@ -26,16 +19,6 @@ const SchoolModal = dynamic(() => import("@/components/SchoolModal"), {
     </div>
   ),
   ssr: false, // No necesitamos SSR para el modal
-})
-
-// Importar el modal de aniversarios de forma dinámica
-const AniversariosModal = dynamic(() => import("@/components/AniversariosModal"), {
-  loading: () => (
-    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center">
-      <div className="bg-white p-8 rounded-xl shadow-lg">Cargando aniversarios...</div>
-    </div>
-  ),
-  ssr: false,
 })
 
 interface EscuelasClientProps {
@@ -58,7 +41,6 @@ export default function EscuelasClient({ initialEscuelas }: EscuelasClientProps)
   const [currentPage, setCurrentPage] = useState(initialPage)
   const [isSearching, setIsSearching] = useState(false)
   const itemsPerPage = 6 // Cambiado de 5 a 6 escuelas por página
-  const [isAniversariosModalOpen, setIsAniversariosModalOpen] = useState(false)
 
   // Actualizar la URL cuando cambian los filtros o la página
   useEffect(() => {
@@ -135,16 +117,6 @@ export default function EscuelasClient({ initialEscuelas }: EscuelasClientProps)
     setCurrentPage(1)
   }, [])
 
-  const handleOpenAniversariosModal = useCallback(() => {
-    setIsAniversariosModalOpen(true)
-    document.body.style.overflow = "hidden"
-  }, [])
-
-  const handleCloseAniversariosModal = useCallback(() => {
-    setIsAniversariosModalOpen(false)
-    document.body.style.overflow = "auto"
-  }, [])
-
   return (
     <>
       <div className="container mx-auto px-4 py-8 space-y-8">
@@ -180,14 +152,6 @@ export default function EscuelasClient({ initialEscuelas }: EscuelasClientProps)
               <p>Mostrando todas las escuelas ({escuelas.length})</p>
             )}
           </div>
-
-          <button 
-            onClick={handleOpenAniversariosModal}
-            className="flex items-center gap-2 px-3 py-1.5 bg-verde/5 hover:bg-verde/10 rounded-lg transition-colors"
-          >
-            <PartyPopper className="h-4 w-4 text-verde" />
-            <span className="text-sm text-verde font-medium">Aniversarios de hoy</span>
-          </button>
         </div>
 
         {filteredEscuelas.length > 0 ? (
@@ -226,7 +190,6 @@ export default function EscuelasClient({ initialEscuelas }: EscuelasClientProps)
 
       <AnimatePresence>
         {isModalOpen && selectedEscuela && <SchoolModal escuela={selectedEscuela} onClose={handleCloseModal} />}
-        {isAniversariosModalOpen && <AniversariosModal onClose={handleCloseAniversariosModal} />}
       </AnimatePresence>
     </>
   )
