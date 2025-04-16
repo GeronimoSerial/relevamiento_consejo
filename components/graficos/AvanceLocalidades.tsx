@@ -53,11 +53,32 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
       conteo[localidad] = 0
     })
 
+    // Función para normalizar nombres de departamentos
+    const normalizarDepartamento = (departamento: string) => {
+      return departamento
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // Eliminar tildes
+        .replace(/gral\.?/gi, "general") // Convertir "Gral." o "Gral" a "General"
+        .replace(/dr\.?/gi, "doctor") // Convertir "Dr." o "Dr" a "Doctor"
+        .replace(/ing\.?/gi, "ingeniero") // Convertir "Ing." o "Ing" a "Ingeniero"
+        .replace(/[.,]/g, "") // Eliminar puntos y comas
+        .replace(/\s+/g, " ") // Normalizar espacios
+        .trim()
+        .toLowerCase()
+    }
+
     // Contar escuelas por departamento
     escuelas.forEach((escuela) => {
       const departamento = escuela.departamento
-      if (departamento in conteo) {
-        conteo[departamento]++
+      const departamentoNormalizado = normalizarDepartamento(departamento)
+      
+      // Encontrar la clave correspondiente en escuelasEsperadas
+      const claveEncontrada = Object.keys(escuelasEsperadas).find(
+        clave => normalizarDepartamento(clave) === departamentoNormalizado
+      )
+      
+      if (claveEncontrada) {
+        conteo[claveEncontrada]++
       }
     })
 
