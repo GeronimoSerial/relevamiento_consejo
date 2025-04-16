@@ -210,20 +210,43 @@ export default function AIInsights({}: AIInsightsProps) {
             <label htmlFor="supervisor-select" className="text-sm font-medium text-gray-700">
               Filtrar análisis por supervisor:
             </label>
-            <Select value={selectedSupervisor} onValueChange={handleSupervisorChange} disabled={isLoading}>
+            <Select 
+              value={selectedSupervisor} 
+              onValueChange={handleSupervisorChange} 
+              disabled={isLoading}
+            >
               <SelectTrigger 
                 id="supervisor-select" 
-                className="w-full max-w-xs bg-white border-gray-300 rounded-xl focus:ring-2 focus:ring-verde focus:border-verde transition-colors"
+                className={`w-full max-w-xs bg-white border-gray-300 rounded-xl shadow-md transition-all duration-200
+                  ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
+                  hover:border-verde hover:ring-2 hover:ring-verde/20
+                  focus:border-verde focus:ring-2 focus:ring-verde/20
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-verde/20
+                  disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-300
+                `}
                 aria-label="Seleccionar supervisor para filtrar el análisis"
+                aria-disabled={isLoading}
               >
                 <SelectValue placeholder="Seleccionar supervisor" />
               </SelectTrigger>
-              <SelectContent className="bg-white">
-                <SelectItem value="all" className="focus:bg-verde/10">
+              <SelectContent 
+                className="bg-white border-gray-200 shadow-lg rounded-xl"
+                position="popper"
+              >
+                <SelectItem 
+                  value="all" 
+                  className="focus:bg-verde/10 focus:text-verde data-[state=checked]:bg-verde/10 data-[state=checked]:text-verde"
+                  aria-label="Análisis General"
+                >
                   <strong>Análisis General</strong>
                 </SelectItem>
                 {todosSupervisores.sort().map((supervisor) => (
-                  <SelectItem key={supervisor} value={supervisor} className="focus:bg-verde/10">
+                  <SelectItem 
+                    key={supervisor} 
+                    value={supervisor}
+                    className="focus:bg-verde/10 focus:text-verde data-[state=checked]:bg-verde/10 data-[state=checked]:text-verde"
+                    aria-label={`Supervisor ${supervisor}`}
+                  >
                     {supervisor}
                   </SelectItem>
                 ))}

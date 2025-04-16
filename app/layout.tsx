@@ -1,18 +1,20 @@
-import type React from "react"
 import type { Metadata } from "next"
+import { Montserrat } from "next/font/google"
 import "./globals.css"
+import ErrorBoundary from "@/components/ErrorBoundary"
+
+const montserrat = Montserrat({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Sistema de Relevamiento Escolar",
+  title: "Sistema de Relevamiento de Gráficos",
   description: "Consejo General de Educación - Centro de Cómputos",
-    generator: 'Centro de Cómputos - Serial Geronimo'
 }
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
     <html lang="es">
       <head>
@@ -23,7 +25,11 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body className={montserrat.className}>
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
+      </body>
     </html>
   )
 }

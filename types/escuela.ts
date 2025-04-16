@@ -32,6 +32,7 @@ export interface Escuela {
   conexionInternet?: string
   problematicas?: string
   supervisor?: string
+  fechaFundacion2?: number
 }
 
 // Mapeo de supervisores por departamento

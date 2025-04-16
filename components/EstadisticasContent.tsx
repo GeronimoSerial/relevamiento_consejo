@@ -1,14 +1,14 @@
 "use client"
 
-import { useMemo, memo } from "react"
+import { useMemo, memo, useState } from "react"
 import { motion } from "framer-motion"
 import { BarChart3, School, Wifi, Users, FileSpreadsheet, Info } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import dynamic from "next/dynamic"
 import type { Escuela } from "@/types/escuela"
 import AIInsights from "./AIInsights"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 // Importar componentes de gráficos de forma dinámica para evitar errores de SSR
 const MatriculaPorDepartamento = dynamic(() => import("@/components/graficos/MatriculaPorDepartamento"), {
   ssr: false,
