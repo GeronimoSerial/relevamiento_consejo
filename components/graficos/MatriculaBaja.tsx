@@ -3,7 +3,7 @@
 import { useMemo, memo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 import { Escuela } from '@/types/escuela';
-import { validarRatio } from '@/src/utils/matriculaBaja';
+import { validarRatio } from '@/lib/matriculaBaja';
 import { Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
@@ -107,16 +107,31 @@ function MatriculaBaja({ escuelas }: MatriculaBajaProps) {
         const resultado = validarRatio(escuela);
         if (!escuela.cantidadDocenGrado) return null;
         
-        const porcentaje = resultado.ratio > 0 
-          ? (resultado.ratio / resultado.minimoEsperado) * 100 
-          : 0;
+        // Calcular porcentaje según la categoría
+        let porcentaje: number;
+        if (Array.isArray(resultado.minimoEsperado)) {
+          // Para categoría 4, calcular el porcentaje basado en el rango
+          const [min, max] = resultado.minimoEsperado;
+          if (resultado.ratio < min) {
+            porcentaje = (resultado.ratio / min) * 100;
+          } else if (resultado.ratio > max) {
+            porcentaje = 100 + ((resultado.ratio - max) / max) * 100;
+          } else {
+            porcentaje = 100;
+          }
+        } else {
+          // Para otras categorías, calcular normalmente
+          porcentaje = resultado.ratio > 0 
+            ? (resultado.ratio / resultado.minimoEsperado) * 100 
+            : 0;
+        }
         
         return {
           ...escuela,
           ratio: resultado.ratio,
           minimoEsperado: resultado.minimoEsperado,
           estado: resultado.estado,
-          porcentaje: Math.min(porcentaje, 100),
+          porcentaje: Math.min(porcentaje, 200), // Permitir hasta 200% para casos extremos
           id: `${escuela.cue}-${index}`
         };
       })
@@ -127,7 +142,7 @@ function MatriculaBaja({ escuelas }: MatriculaBajaProps) {
         // Primero ordenar por matrícula 0
         if (a.matricula2025 === 0 && b.matricula2025 !== 0) return -1;
         if (a.matricula2025 !== 0 && b.matricula2025 === 0) return 1;
-        // Luego por porcentaje
+        // Luego por porcentaje (de menor a mayor)
         return a.porcentaje - b.porcentaje;
       });
 
@@ -199,9 +214,16 @@ function MatriculaBaja({ escuelas }: MatriculaBajaProps) {
             Escuelas por debajo del mínimo ({escuelasDebajoMinimo.length})
           </h3>
           <div className="max-h-[400px] overflow-y-auto pr-2 space-y-3 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-            {escuelasDebajoMinimo.map((escuela) => (
-              <EscuelaCard key={escuela.id} escuela={escuela} />
-            ))}
+            {escuelasDebajoMinimo.map((escuela) => {
+              // Ensure minimoEsperado is a number
+              const escuelaWithNumberMinimo = {
+                ...escuela,
+                minimoEsperado: Array.isArray(escuela.minimoEsperado) 
+                  ? escuela.minimoEsperado[0] 
+                  : escuela.minimoEsperado
+              };
+              return <EscuelaCard key={escuela.id} escuela={escuelaWithNumberMinimo} />;
+            })}
           </div>
         </div>
       )}
