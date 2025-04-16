@@ -95,7 +95,7 @@ export async function GET() {
     const cacheKey = 'daily_analysis'
     const cachedAnalysis = getCachedResponse(cacheKey)
     
-    // Si hay un análisis en caché de menos de 24 horas, lo devolvemos
+    // Si hay un análisis en caché, lo devolvemos
     if (cachedAnalysis) {
       return NextResponse.json({ text: cachedAnalysis })
     }
@@ -154,7 +154,7 @@ Requisitos:
     const data = await response.json()
     const text = data.candidates[0].content.parts[0].text
 
-    // Guardar en caché por 24 horas
+    // Guardar en caché
     setCachedResponse(cacheKey, text)
 
     return NextResponse.json({ text })

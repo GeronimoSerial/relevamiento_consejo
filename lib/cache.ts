@@ -7,7 +7,7 @@ interface CacheEntry {
 }
 
 const CACHE_FILE = path.join(process.cwd(), 'public', 'analisis.json')
-const CACHE_EXPIRATION = 24 * 60 * 60 * 1000 // 24 horas en milisegundos
+const CACHE_EXPIRATION = 7 * 24 * 60 * 60 * 1000 // 7 días en milisegundos
 
 function readCache(): Record<string, CacheEntry> {
   try {
