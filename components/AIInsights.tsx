@@ -47,35 +47,20 @@ function limpiarTexto(texto: string): string {
 // Función para llamar a la API de Gemini
 async function generateGeminiInsight(supervisor: string) {
   try {
+    // Si es análisis general, usar el endpoint diario
+    if (supervisor === "all") {
+      const response = await fetch('/api/gemini/daily')
+      if (!response.ok) {
+        throw new Error('Error en la llamada a la API')
+      }
+      const data = await response.json()
+      return limpiarTexto(data.text)
+    }
+
+    // Para análisis específico de supervisor, usar el endpoint normal
     const problematicas = obtenerProblematicasPorSupervisor(supervisor)
     
-    const prompt = supervisor === "all"
-      ? `Analiza las siguientes problemáticas reportadas en las escuelas y genera un análisis conciso con el siguiente formato:
-
-<u>ESCUELAS CON PROBLEMÁTICAS CRÍTICAS:</u>
-
-1. <strong>Nombre de la escuela</strong>
-   - <b>Problemática principal</b>
-   - <b>Impacto</b>
-
-2. <strong>Nombre de la escuela</strong>
-   - <b>Problemática principal</b>
-   - <b>Impacto</b>
-
-(Continuar con máximo 5 escuelas)
-
-${JSON.stringify(problematicas, null, 2)}
-
-Requisitos:
-- Máximo 5 escuelas
-- Enfócate en los problemas más urgentes
-- Usa lenguaje claro y directo
-- Incluye solo la información más relevante
-- NO uses asteriscos (**) para el formato
-- Usa <strong> SOLO para los nombres de las escuelas
-- NO uses <strong> en las problemáticas o impactos, utiliza <b> en su lugar
-- Los nombres de escuelas deben estar en negrita usando <strong>`
-      : `Analiza las problemáticas específicas para las escuelas del supervisor ${supervisor} y genera un análisis conciso con el siguiente formato:
+    const prompt = `Analiza las problemáticas específicas para las escuelas del supervisor ${supervisor} y genera un análisis conciso con el siguiente formato:
 
 <u>ESCUELAS CON PROBLEMÁTICAS CRÍTICAS:</u>
 
@@ -145,7 +130,7 @@ export default function AIInsights({}: AIInsightsProps) {
     }
 
     generateInitialInsight()
-  }, [])
+  }, [selectedSupervisor])
 
   const handleRegenerateInsight = async () => {
     setIsLoading(true)
