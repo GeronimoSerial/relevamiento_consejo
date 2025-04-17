@@ -28,3 +28,5 @@ next-env.d.ts
 .cursor
 data/escuelas - copia (2).json
 data/escuelas - copia.json
+.vscode/mcp.json
+app/globals.css
