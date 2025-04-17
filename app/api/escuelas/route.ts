@@ -2,7 +2,6 @@ import { NextResponse } from "next/server"
 import escuelasData from "@/data/escuelas.json"
 import type { Escuela } from "@/types/escuela"
 import { normalizarTexto } from "@/lib/escuelas"
-
 // Esta API route permite obtener las escuelas con paginación y filtrado
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -19,7 +18,8 @@ export async function GET(request: Request) {
     fechaFundacion2: Number(escuela.fechaFundacion2),
     matricula2025: Number(escuela.matricula2025),
     matricula2024: Number(escuela.matricula2024),
-    problematicas: escuela.problematicas?.toString()
+    problematicas: escuela.problematicas?.toString(),
+    programasAcompañamiento: escuela.programasAcompañamiento?.toString()
   }))
 
   if (search) {

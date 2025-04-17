@@ -5,8 +5,16 @@ export async function POST(request: Request) {
   try {
     const { prompt, supervisor } = await request.json()
     
-    // Crear una clave única para el caché basada en el supervisor
-    const cacheKey = `gemini_${supervisor || 'all'}`
+    if (!supervisor || !prompt) {
+      return NextResponse.json(
+        { error: 'Faltan datos requeridos: supervisor o prompt' },
+        { status: 400 }
+      )
+    }
+    
+    // Crear una clave única para el caché basada en el supervisor y timestamp
+    const timestamp = new Date().toISOString().split('T')[0] // Usamos solo la fecha
+    const cacheKey = `gemini_${supervisor}_${timestamp}`
 
     // Intentar obtener la respuesta del caché
     const cachedResponse = getCachedResponse(cacheKey)
