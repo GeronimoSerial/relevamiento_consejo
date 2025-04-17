@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
@@ -138,7 +139,7 @@ export default function EscuelasClient({ initialEscuelas }: EscuelasClientProps)
                 {searchTerm && (
                   <span>
                     {" "}
-                    para "<span className="font-medium">{searchTerm}</span>"
+                    para &quot;<span className="font-medium">{searchTerm}</span>&quot;
                   </span>
                 )}
                 {supervisor && (
