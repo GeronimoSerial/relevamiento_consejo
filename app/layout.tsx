@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import type { Metadata } from "next"
 import "@fontsource/montserrat/latin.css"
 import "./globals.css"

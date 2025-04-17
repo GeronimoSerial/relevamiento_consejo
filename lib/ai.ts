@@ -26,7 +26,7 @@ function obtenerProblematicasPorSupervisor(escuelas: Escuela[], supervisor: stri
     
     // Encontrar los departamentos que supervisa
     const departamentosSupervisados = Object.entries(supervisoresPorDepartamento)
-        .filter(([_, supervisores]) => 
+        .filter(([,supervisores]) => 
             supervisores.some(s => s.toLowerCase().trim() === supervisorNormalizado)
         )
         .map(([depto]) => depto);

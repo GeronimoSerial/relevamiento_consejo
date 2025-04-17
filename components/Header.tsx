@@ -3,7 +3,7 @@
 import { memo, useState, useEffect, useCallback, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { usePathname, useRouter } from "next/navigation"
-import { BarChart3, ChevronLeft, Menu, X, School, PartyPopper } from "lucide-react"
+import { BarChart3, ChevronLeft, Menu, X, PartyPopper } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import AniversariosModal from "./principal/AniversariosModal"

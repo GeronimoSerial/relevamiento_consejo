@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 "use client"
 
 import { memo } from "react"
@@ -66,7 +67,7 @@ const SchoolCard = memo(function SchoolCard({ escuela, onVerMas }: SchoolCardPro
           {supervisores.length > 0 && (
             <div className="flex items-start">
               <UserCheck className="h-4 w-4 text-verde mr-2 mt-0.5 flex-shrink-0" />
-              <p>
+              <p className="line-clamp-2">
                 <span className="font-medium">Supervisor/a:</span> {supervisores.join(", ")}
               </p>
             </div>

@@ -4,8 +4,6 @@ import { useMemo, memo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 import { Escuela } from '@/types/iEscuela';
 import { validarRatio } from '@/lib/matriculaBaja';
-import { Info } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 interface MatriculaBajaProps {
   escuelas: Escuela[];

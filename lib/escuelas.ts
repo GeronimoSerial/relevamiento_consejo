@@ -5,22 +5,35 @@ import escuelasData from "@/data/escuelas.json"
 // Función para obtener todas las escuelas (usado en getStaticProps)
 export function getAllEscuelas(): Escuela[] {
   // Asignar supervisores a cada escuela basado en su departamento
-  const escuelasConSupervisores = escuelasData.map((escuela: any) => {
-    // Normalizar DocenEspeciales
-    const escuelaNormalizada = {
-      ...escuela,
-      DocenEspeciales: escuela.DocenEspeciales === 0 ? "No tiene" : escuela.DocenEspeciales?.toString() || undefined,
+  const escuelasConSupervisores = escuelasData.map((escuela) => {
+    // Normalizar DocenEspeciales (puede venir como string, number o undefined)
+    let docenEspeciales: string | undefined
+    if (escuela.DocenEspeciales === 0 || escuela.DocenEspeciales === "0") {
+      docenEspeciales = "No tiene"
+    } else if (escuela.DocenEspeciales !== undefined && escuela.DocenEspeciales !== null) {
+      docenEspeciales = escuela.DocenEspeciales.toString()
+    } else {
+      docenEspeciales = undefined
+    }
+
+    // Normalizar fechaFundacion2 si existe y es string
+    let fechaFundacion2: number | undefined = undefined
+    if (typeof escuela.fechaFundacion2 === "string") {
+      const parsed = parseInt(escuela.fechaFundacion2, 10)
+      fechaFundacion2 = isNaN(parsed) ? undefined : parsed
+    } else if (typeof escuela.fechaFundacion2 === "number") {
+      fechaFundacion2 = escuela.fechaFundacion2
     }
 
     // Obtener los supervisores para el departamento de la escuela
     const supervisores = supervisoresPorDepartamento[escuela.departamento] || []
 
-    // Asignar el primer supervisor como supervisor principal (simplificación)
-    // En un caso real, esto podría ser más complejo y requerir datos adicionales
     return {
-      ...escuelaNormalizada,
+      ...escuela,
+      DocenEspeciales: docenEspeciales,
+      fechaFundacion2,
       supervisor: supervisores.length > 0 ? supervisores[0] : undefined,
-    }
+    } as Escuela
   })
 
   return escuelasConSupervisores

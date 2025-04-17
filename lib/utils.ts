@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function limpiarTexto(texto: string) {
     // Primero convertimos los títulos de escuelas que usan **
-    texto = texto.replace(/\d+\.\s*\*\*(.*?)\*\*/g, (match, p1) => {
+    texto = texto.replace(/\d+\.\s*\*\*(.*?)\*\*/g, (match) => {
       return match.replace(/\*\*(.*?)\*\*/, '<strong>$1</strong>');
     });
           

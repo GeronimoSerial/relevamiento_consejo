@@ -1,7 +1,8 @@
+/* eslint-disable react/react-in-jsx-scope */
 "use client"
 
 import { memo, useEffect, useState, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { X, PartyPopper, Calendar } from "lucide-react"
 import { getAllEscuelas } from "@/lib/escuelas"
 import type { Escuela } from "@/types/iEscuela"

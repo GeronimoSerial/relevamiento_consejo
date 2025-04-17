@@ -1,8 +1,9 @@
+/* eslint-disable react/react-in-jsx-scope */
 "use client"
 
-import { useMemo, memo, useState } from "react"
+import { useMemo, memo } from "react"
 import { motion } from "framer-motion"
-import { BarChart3, School, Wifi, Users, FileSpreadsheet, Info } from "lucide-react"
+import { BarChart3, School, Users, FileSpreadsheet, Info } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"

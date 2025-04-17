@@ -1,17 +1,18 @@
+/* eslint-disable react/react-in-jsx-scope */
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Brain, RefreshCw, UserCheck } from "lucide-react"
+import { motion } from "framer-motion"
+import { Brain, UserCheck } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { todosSupervisores } from "@/types/iEscuela"
 import { generateGeminiInsight } from "@/lib/ai"
 
 
-type AIInsightsProps = {}
+// type AIInsightsProps = object
 
-export default function AIInsights({}: AIInsightsProps) {
+export default function AIInsights()  {
   const [isLoading, setIsLoading] = useState(false)
   const [insightText, setInsightText] = useState("")
   const [selectedSupervisor, setSelectedSupervisor] = useState("all")

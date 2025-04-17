@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { Suspense } from "react"
 import { getAllEscuelas } from "@/lib/escuelas"
 import Header from "@/components/Header"
