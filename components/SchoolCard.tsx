@@ -44,9 +44,14 @@ const SchoolCard = memo(function SchoolCard({ escuela, onVerMas }: SchoolCardPro
           {escuela.telefono && (
             <div className="flex items-start">
               <Phone className="h-4 w-4 text-verde mr-2 mt-0.5 flex-shrink-0" />
-              <p>
+              <a 
+                href={`https://wa.me/54${escuela.telefono}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-verde hover:text-verde/80 transition-colors duration-200 underline underline-offset-2"
+              >
                 <span className="font-medium">Teléfono:</span> {escuela.telefono}
-              </p>
+              </a>
             </div>
           )}
 
