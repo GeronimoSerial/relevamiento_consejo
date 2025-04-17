@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 "use client"
 
 import { memo, useState, useEffect, useCallback, useMemo } from "react"
@@ -184,21 +185,26 @@ const SearchBar = memo(function SearchBar({
       </div>
 
       {/* Mensaje de información */}
-      <div className="bg-amber-50 p-3 rounded-lg border border-amber-200">
-        <div className="flex items-start">
-          <Info className="h-4 w-4 text-amber-600 mr-2 mt-0.5" />
-          <p className="text-xs text-amber-800">
-            La funcionalidad de filtrado por supervisores (En todas las secciones) está en proceso y se irá corrigiendo a medida que los datos sean cargados.
-          </p>
-        </div>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+        className="flex items-center gap-2 bg-amber-50 p-2 sm:p-3 rounded-lg border border-amber-200 text-xs text-amber-800 shadow-sm"
+        role="status"
+        aria-live="polite"
+      >
+        <Info className="h-4 w-4 text-amber-600 flex-shrink-0" />
+        <span>
+          La funcionalidad de filtrado por supervisores (En todas las secciones) está en proceso y se irá corrigiendo a medida que los datos sean cargados.
+        </span>
+      </motion.div>
 
       <div className="flex justify-between items-center mt-2 px-1">
         <p className="text-xs text-gray-500">Busque por nombre, CUE, director, localidad o supervisor</p>
 
         {(searchTerm || supervisor) && (
           <div className="flex flex-wrap gap-2">
-            {searchTerm && <p className="text-xs text-verde font-medium">Texto: "{searchTerm}"</p>}
+            {searchTerm && <p className="text-xs text-verde font-medium">Texto: &quot;{searchTerm}&quot;</p>}
             {supervisor && <p className="text-xs text-verde font-medium">Supervisor: {supervisor}</p>}
           </div>
         )}
