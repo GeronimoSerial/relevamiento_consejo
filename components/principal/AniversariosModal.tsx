@@ -3,8 +3,8 @@
 import { memo, useEffect, useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, PartyPopper, Calendar } from "lucide-react"
-import type { Escuela } from "@/types/escuela"
-import escuelasData from "@/data/escuelas.json"
+import { getAllEscuelas } from "@/lib/escuelas"
+import type { Escuela } from "@/types/iEscuela"
 
 interface AniversariosModalProps {
   onClose: () => void
@@ -35,7 +35,7 @@ function formatearFecha(fecha: string): string {
 }
 
 // Función para obtener las escuelas que cumplen aniversario hoy
-function obtenerEscuelasAniversario(escuelas: typeof escuelasData): typeof escuelasData {
+function obtenerEscuelasAniversario(escuelas: Escuela[]): Escuela[] {
   const hoy = new Date()
   const diaHoy = hoy.getDate()
   const mesHoy = hoy.getMonth() + 1 // Los meses en JS van de 0 a 11
@@ -64,8 +64,8 @@ function obtenerEscuelasAniversario(escuelas: typeof escuelasData): typeof escue
 }
 
 const AniversariosModal = memo(function AniversariosModal({ onClose }: AniversariosModalProps) {
-  const [escuelasAniversario, setEscuelasAniversario] = useState<typeof escuelasData>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [escuelasAniversario, setEscuelasAniversario] = useState<Escuela[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const modalRef = useRef<HTMLDivElement>(null)
 
   const handleOpen = async () => {
@@ -73,7 +73,8 @@ const AniversariosModal = memo(function AniversariosModal({ onClose }: Aniversar
     try {
       // Simulamos una pequeña demora para mostrar el estado de carga
       await new Promise(resolve => setTimeout(resolve, 500))
-      const escuelasHoy = obtenerEscuelasAniversario(escuelasData)
+      const escuelasHoy = obtenerEscuelasAniversario(getAllEscuelas())
+      // Cargamos las escuelas que cumplen aniversario hoy
       setEscuelasAniversario(escuelasHoy)
     } catch (error) {
       console.error("Error al cargar aniversarios:", error)

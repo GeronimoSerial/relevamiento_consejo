@@ -1,7 +1,7 @@
-import type { Escuela } from "@/types/escuela"
+import type { Escuela } from "@/types/iEscuela"
 import { limpiarTexto } from "@/lib/utils"
 import escuelasData from "@/data/escuelas.json"
-import { supervisoresPorDepartamento } from "@/types/escuela"
+import { supervisoresPorDepartamento } from "@/types/iEscuela"
 
 interface ProblematicaEscuela {
     nombre: string | number

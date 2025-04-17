@@ -1,5 +1,5 @@
-import type { Escuela } from "@/types/escuela"
-import { supervisoresPorDepartamento } from "@/types/escuela"
+import type { Escuela } from "@/types/iEscuela"
+import { supervisoresPorDepartamento } from "@/types/iEscuela"
 import escuelasData from "@/data/escuelas.json"
 
 // Función para obtener todas las escuelas (usado en getStaticProps)

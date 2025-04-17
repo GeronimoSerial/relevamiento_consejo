@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { BarChart3, ChevronLeft, Menu, X, School, PartyPopper } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import AniversariosModal from "./AniversariosModal"
+import AniversariosModal from "./principal/AniversariosModal"
 
 // Componente para el botón de navegación
 const NavButton = memo(function NavButton({

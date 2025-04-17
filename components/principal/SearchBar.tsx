@@ -4,7 +4,7 @@ import { memo, useState, useEffect, useCallback, useMemo } from "react"
 import { motion } from "framer-motion"
 import { Search, X, UserCheck, Info, AlertCircle, Loader2 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { todosSupervisores } from "@/types/escuela"
+import { todosSupervisores } from "@/types/iEscuela"
 
 interface SearchBarProps {
   onSearch: (term: string) => void

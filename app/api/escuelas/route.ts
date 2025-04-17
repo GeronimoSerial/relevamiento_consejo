@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import escuelasData from "@/data/escuelas.json"
-import type { Escuela } from "@/types/escuela"
+import type { Escuela } from "@/types/iEscuela"
 import { normalizarTexto } from "@/lib/escuelas"
 // Esta API route permite obtener las escuelas con paginación y filtrado
 export async function GET(request: Request) {

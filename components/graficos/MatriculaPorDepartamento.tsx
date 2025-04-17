@@ -2,7 +2,7 @@
 
 import { useMemo, useEffect, useState } from "react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
-import type { Escuela } from "@/types/escuela"
+import type { Escuela } from "@/types/iEscuela"
 
 interface MatriculaPorDepartamentoProps {
   escuelas: Escuela[]

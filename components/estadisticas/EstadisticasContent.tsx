@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import dynamic from "next/dynamic"
-import type { Escuela } from "@/types/escuela"
+import type { Escuela } from "@/types/iEscuela"
 import AIInsights from "./AIInsights"
 // Importar componentes de gráficos de forma dinámica para evitar errores de SSR
 const MatriculaPorDepartamento = dynamic(() => import("@/components/graficos/MatriculaPorDepartamento"), {

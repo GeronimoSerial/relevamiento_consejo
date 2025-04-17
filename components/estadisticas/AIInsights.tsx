@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Brain, RefreshCw, UserCheck } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { todosSupervisores } from "@/types/escuela"
+import { todosSupervisores } from "@/types/iEscuela"
 import { generateGeminiInsight } from "@/lib/ai"
 
 

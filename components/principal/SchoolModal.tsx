@@ -3,8 +3,8 @@
 import { memo, useCallback, useMemo } from "react"
 import { motion } from "framer-motion"
 import { X } from "lucide-react"
-import type { Escuela } from "@/types/escuela"
-import { supervisoresPorDepartamento } from "@/types/escuela"
+import type { Escuela } from "@/types/iEscuela"
+import { supervisoresPorDepartamento } from "@/types/iEscuela"
 
 interface SchoolModalProps {
   escuela: Escuela

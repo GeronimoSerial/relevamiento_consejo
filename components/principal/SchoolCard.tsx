@@ -2,8 +2,8 @@
 
 import { memo } from "react"
 import { School, User, Users, MapPin, Phone, UserCheck } from "lucide-react"
-import type { Escuela } from "@/types/escuela"
-import { supervisoresPorDepartamento } from "@/types/escuela"
+import type { Escuela } from "@/types/iEscuela"
+import { supervisoresPorDepartamento } from "@/types/iEscuela"
 
 interface SchoolCardProps {
   escuela: Escuela

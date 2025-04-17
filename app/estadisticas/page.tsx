@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import { getAllEscuelas } from "@/lib/escuelas"
 import Header from "@/components/Header"
-import EstadisticasContent from "@/components/EstadisticasContent"
+import EstadisticasContent from "@/components/estadisticas/EstadisticasContent"
 import LoadingEstadisticas from "@/components/LoadingEstadisticas"
 
 export default async function EstadisticasPage() {

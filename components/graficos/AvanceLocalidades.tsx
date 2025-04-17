@@ -14,9 +14,9 @@ import {
   ReferenceLine,
 } from "recharts"
 import { User, Info, AlertCircle } from "lucide-react"
-import type { Escuela } from "@/types/escuela"
+import type { Escuela } from "@/types/iEscuela"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { supervisoresPorDepartamento, todosSupervisores, escuelasEsperadas } from "@/types/escuela"
+import { supervisoresPorDepartamento, todosSupervisores, escuelasEsperadas } from "@/types/iEscuela"
 
 interface AvanceLocalidadesProps {
   escuelas: Escuela[]

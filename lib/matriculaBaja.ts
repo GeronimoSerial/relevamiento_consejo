@@ -1,4 +1,4 @@
-import { Escuela } from "@/types/escuela";
+import { Escuela } from "@/types/iEscuela";
 
 interface ResultadoValidacion {
   estado: 'debajo' | 'cerca' | 'minimo' | 'arriba';

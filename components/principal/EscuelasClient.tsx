@@ -4,15 +4,15 @@ import { useState, useEffect, useCallback, useMemo } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import dynamic from "next/dynamic"
-import SearchBar from "@/components/SearchBar"
-import SchoolCard from "@/components/SchoolCard"
-import Pagination from "@/components/Pagination"
+import SearchBar from "@/components/principal/SearchBar"
+import SchoolCard from "@/components/principal/SchoolCard"
+import Pagination from "@/components/principal/Pagination"
 import NoResults from "@/components/NoResults"
 import { filtrarEscuelas, paginarEscuelas } from "@/lib/escuelas"
-import type { Escuela } from "@/types/escuela"
+import type { Escuela } from "@/types/iEscuela"
 
 // Importar el modal de forma dinámica para reducir el bundle inicial
-const SchoolModal = dynamic(() => import("@/components/SchoolModal"), {
+const SchoolModal = dynamic(() => import("@/components/principal/SchoolModal"), {
   loading: () => (
     <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center">
       <div className="bg-white p-8 rounded-xl shadow-lg">Cargando detalles...</div>
