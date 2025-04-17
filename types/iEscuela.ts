@@ -104,7 +104,7 @@ export const escuelasEsperadas: Record<string, number> = {
   "Gral. Alvear": 14,
   "Gral. Paz": 34,
   Goya: 95,
-  Itatí: 11,
+  Itati: 11,
   Ituzaingó: 37,
   Lavalle: 43,
   Mburucuyá: 18,

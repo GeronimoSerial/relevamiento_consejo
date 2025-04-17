@@ -1,9 +1,8 @@
+/* eslint-disable react/react-in-jsx-scope */
 import type { Metadata } from "next"
-import { Montserrat } from "next/font/google"
+import "@fontsource/montserrat/latin.css"
 import "./globals.css"
 import ErrorBoundary from "@/components/ErrorBoundary"
-
-const montserrat = Montserrat({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Sistema de Relevamiento Escolar",
@@ -18,14 +17,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
+        {/* Eliminados los links a Google Fonts */}
       </head>
-      <body className={montserrat.className}>
+      <body>
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
@@ -33,6 +27,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-
-import './globals.css'

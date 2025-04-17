@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/react-in-jsx-scope */
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
@@ -14,9 +16,9 @@ import {
   ReferenceLine,
 } from "recharts"
 import { User, Info, AlertCircle } from "lucide-react"
-import type { Escuela } from "@/types/escuela"
+import type { Escuela } from "@/types/iEscuela"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { supervisoresPorDepartamento, todosSupervisores, escuelasEsperadas } from "@/types/escuela"
+import { supervisoresPorDepartamento, todosSupervisores, escuelasEsperadas } from "@/types/iEscuela"
 
 interface AvanceLocalidadesProps {
   escuelas: Escuela[]
@@ -25,7 +27,7 @@ interface AvanceLocalidadesProps {
 export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) {
   const [isMobile, setIsMobile] = useState(false)
   const [filtroSupervisor, setFiltroSupervisor] = useState("")
-  const [departamentoSeleccionado, setLocalidadSeleccionada] = useState<string | null>(null)
+  const [,setLocalidadSeleccionada] = useState<string | null>(null)
 
   // Detectar si es dispositivo móvil
   useEffect(() => {
@@ -92,7 +94,7 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
     }
 
     return Object.entries(supervisoresPorDepartamento)
-      .filter(([_, supervisores]) => supervisores.includes(filtroSupervisor))
+      .filter(([, supervisores]) => supervisores.includes(filtroSupervisor))
       .map(([departamento]) => departamento)
   }, [filtroSupervisor])
 
@@ -136,7 +138,18 @@ export default function AvanceLocalidades({ escuelas }: AvanceLocalidadesProps) 
   }, [data])
 
   // Componente personalizado para el tooltip
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  interface DepartamentoTooltipPayload {
+    departamento: string;
+    cargadas: number;
+    esperadas: number;
+    porcentaje: number;
+    supervisores: string[];
+  }
+  interface CustomTooltipProps {
+    active?: boolean;
+    payload?: { payload: DepartamentoTooltipPayload }[];
+  }
+  const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       const item = payload[0].payload
       return (

@@ -1,4 +1,4 @@
-import { Escuela } from "@/types/escuela";
+import { Escuela } from "@/types/iEscuela";
 
 interface ResultadoValidacion {
   estado: 'debajo' | 'cerca' | 'minimo' | 'arriba';
@@ -116,33 +116,3 @@ export function validarRatio(escuela: Escuela): ResultadoValidacion {
     mensaje
   };
 }
-
-function determinarEstado(ratio: number, minimo: number): 'debajo' | 'cerca' | 'minimo' | 'arriba' {
-  const diferencia = Math.abs(ratio - minimo);
-  const porcentajeDiferencia = (diferencia / minimo) * 100;
-
-  if (ratio < minimo) {
-    if (porcentajeDiferencia <= 10) {
-      return 'cerca';
-    }
-    return 'debajo';
-  } else if (ratio === minimo) {
-    return 'minimo';
-  } else {
-    return 'arriba';
-  }
-}
-
-function determinarEstadoRango(ratio: number, minimo: number, maximo: number): 'debajo' | 'cerca' | 'minimo' | 'arriba' {
-  if (ratio < minimo) {
-    const diferencia = minimo - ratio;
-    const porcentajeDiferencia = (diferencia / minimo) * 100;
-    return porcentajeDiferencia <= 10 ? 'cerca' : 'debajo';
-  } else if (ratio > maximo) {
-    const diferencia = ratio - maximo;
-    const porcentajeDiferencia = (diferencia / maximo) * 100;
-    return porcentajeDiferencia <= 10 ? 'cerca' : 'arriba';
-  } else {
-    return 'minimo';
-  }
-} 

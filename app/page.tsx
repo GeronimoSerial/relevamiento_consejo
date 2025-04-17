@@ -1,7 +1,8 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { Suspense } from "react"
 import { getAllEscuelas } from "@/lib/escuelas"
 import Header from "@/components/Header"
-import EscuelasClient from "@/components/EscuelasClient"
+import EscuelasClient from "@/components/principal/EscuelasClient"
 import LoadingEscuelas from "@/components/LoadingEscuelas"
 
 // Esta página ahora es un Server Component que pre-renderiza los datos

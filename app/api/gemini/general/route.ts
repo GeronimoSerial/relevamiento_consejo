@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import escuelasData from "@/data/escuelas.json"
-import type { Escuela } from "@/types/escuela"
+import type { Escuela } from "@/types/iEscuela"
 import { getCachedResponse, setCachedResponse } from "@/lib/cache"
 
 // Asegurar que los datos estén tipados correctamente
