@@ -1,23 +1,11 @@
 import type { Escuela } from "@/types/iEscuela"
-import { limpiarTexto } from "@/lib/utils"
-import escuelasData from "@/data/escuelas.json"
+import { limpiarTexto, normalizarTexto } from "@/lib/utils"
+import { getAllEscuelas } from "./escuelas"
 import { supervisoresPorDepartamento } from "@/types/iEscuela"
 
 interface ProblematicaEscuela {
     nombre: string | number
     problematicas: string | undefined
-}
-
-// Función para normalizar nombres de departamentos
-function normalizarDepartamento(departamento: string): string {
-    return departamento
-        .toLowerCase()
-        .trim()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "") // Eliminar acentos
-        .replace(/\s+/g, " ") // Normalizar espacios
-        .replace(/\./g, "") // Eliminar puntos
-        .replace(/,/g, "") // Eliminar comas
 }
 
 function obtenerProblematicasPorSupervisor(escuelas: Escuela[], supervisor: string): ProblematicaEscuela[] {
@@ -35,11 +23,11 @@ function obtenerProblematicasPorSupervisor(escuelas: Escuela[], supervisor: stri
       .filter(escuela => {
         if (supervisor === "all") return true;
         
-        const departamentoNormalizado = normalizarDepartamento(escuela.departamento);
+        const departamentoNormalizado = normalizarTexto(escuela.departamento);
         
         // Verificar si el departamento de la escuela está en los departamentos supervisados
         return departamentosSupervisados.some(depto => 
-            normalizarDepartamento(depto) === departamentoNormalizado
+            normalizarTexto(depto) === departamentoNormalizado
         );
       })
       .map(escuela => ({
@@ -61,7 +49,7 @@ export async function generateGeminiInsight(supervisor: string) {
     }
 
     // Para análisis específico de supervisor, usar el endpoint normal
-    const problematicas = obtenerProblematicasPorSupervisor(escuelasData as Escuela[], supervisor)
+    const problematicas = obtenerProblematicasPorSupervisor(getAllEscuelas(), supervisor)
     
     console.log("Datos enviados a la API:", {
       supervisor,

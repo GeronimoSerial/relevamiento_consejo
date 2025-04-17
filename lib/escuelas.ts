@@ -1,7 +1,7 @@
 import type { Escuela } from "@/types/iEscuela"
 import { supervisoresPorDepartamento } from "@/types/iEscuela"
 import escuelasData from "@/data/escuelas.json"
-
+import { normalizarTexto } from "./utils"
 // Función para obtener todas las escuelas (usado en getStaticProps)
 export function getAllEscuelas(): Escuela[] {
   // Asignar supervisores a cada escuela basado en su departamento
@@ -40,15 +40,6 @@ export function getAllEscuelas(): Escuela[] {
 }
 
 // Función para normalizar texto (eliminar acentos, convertir a minúsculas, normalizar espacios)
-export function normalizarTexto(texto: unknown): string {
-  if (texto === null || texto === undefined) return ""
-  return String(texto)
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // Eliminar acentos
-    .replace(/\s+/g, " ") // Normalizar espacios múltiples a uno solo
-    .trim()
-}
 
 // Función mejorada para filtrar escuelas por término de búsqueda y supervisor
 export function filtrarEscuelas(escuelas: Escuela[], termino: string, supervisor = ""): Escuela[] {
