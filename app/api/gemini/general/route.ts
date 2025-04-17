@@ -3,11 +3,13 @@ import escuelasData from "@/data/escuelas.json"
 import type { Escuela } from "@/types/iEscuela"
 import { getCachedResponse, setCachedResponse } from "@/lib/cache"
 
-// Asegurar que los datos estén tipados correctamente
-const escuelas: Escuela[] = escuelasData.map(escuela => ({
+// Procesar los datos de escuelas solo una vez
+const escuelas: Escuela[] = (escuelasData as Escuela[]).map(escuela => ({
   ...escuela,
-  fechaFundacion2: Number(escuela.fechaFundacion2)
-})) as Escuela[]
+  fechaFundacion2: typeof escuela.fechaFundacion2 === "number"
+    ? escuela.fechaFundacion2
+    : Number(escuela.fechaFundacion2)
+}));
 
 // Función para optimizar los datos antes de enviarlos a la IA
 function optimizeSchoolData(escuelas: Escuela[]) {
@@ -27,7 +29,7 @@ function optimizeSchoolData(escuelas: Escuela[]) {
     "No hay problemáticas",
     "No hay inconvenientes",
     "No hay dificultades"
-  ]
+  ];
 
   // Problemáticas genéricas que tienen menor prioridad
   const problematicasGenericas = [
@@ -40,68 +42,54 @@ function optimizeSchoolData(escuelas: Escuela[]) {
     "Problemática",
     "Situación",
     "Cuestión"
-  ]
+  ];
 
   return escuelas
-    .filter(escuela => {
-      const problematicas = Array.isArray(escuela.problematicas) 
-        ? escuela.problematicas 
-        : [escuela.problematicas]
+    .map(escuela => {
+      const problematicas = Array.isArray(escuela.problematicas)
+        ? escuela.problematicas
+        : [escuela.problematicas];
 
-      const problematicasRelevantes = problematicas.filter(p => 
-        p && 
-        !problematicasNoRelevantes.some(noRelevante => 
+      // Filtrar problemáticas una sola vez
+      const problematicasRelevantes = problematicas.filter(p =>
+        p &&
+        !problematicasNoRelevantes.some(noRelevante =>
           p.toLowerCase().includes(noRelevante.toLowerCase())
         )
-      )
-
-      return problematicasRelevantes.length > 0
-    })
-    .map(escuela => {
-      const problematicas = Array.isArray(escuela.problematicas) 
-        ? escuela.problematicas 
-        : [escuela.problematicas]
+      );
 
       return {
         nombre: escuela.nombre,
         cue: escuela.cue,
-        problematicas: problematicas.filter(p => 
-          p && 
-          !problematicasNoRelevantes.some(noRelevante => 
-            p.toLowerCase().includes(noRelevante.toLowerCase())
-          )
-        ),
-        // Agregar prioridad basada en si tiene problemáticas específicas
-        prioridad: problematicas.some(p => 
-          p && 
-          !problematicasGenericas.some(generica => 
+        problematicas: problematicasRelevantes,
+        prioridad: problematicasRelevantes.some(p =>
+          !problematicasGenericas.some(generica =>
             p.toLowerCase().includes(generica.toLowerCase())
           )
         ) ? 1 : 0
-      }
+      };
     })
+    .filter(escuela => escuela.problematicas.length > 0)
     .sort((a, b) => {
-      // Primero ordenar por prioridad (problemáticas específicas primero)
       if (a.prioridad !== b.prioridad) {
-        return b.prioridad - a.prioridad
+        return b.prioridad - a.prioridad;
       }
-      // Luego por cantidad de problemáticas
-      return b.problematicas.length - a.problematicas.length
-    })
+      return b.problematicas.length - a.problematicas.length;
+    });
 }
 
 export async function GET() {
   try {
-    const cacheKey = 'daily_analysis'
-    const cachedAnalysis = getCachedResponse(cacheKey)
+    const cacheKey = 'daily_analysis';
+    const cachedAnalysis = getCachedResponse(cacheKey);
     
     // Si hay un análisis en caché, lo devolvemos
     if (cachedAnalysis) {
-      return NextResponse.json({ text: cachedAnalysis })
+      return NextResponse.json({ text: cachedAnalysis });
     }
 
     // Optimizar los datos antes de enviarlos
-    const optimizedData = optimizeSchoolData(escuelas)
+    const optimizedData = optimizeSchoolData(escuelas);
     
     const prompt = `Analiza las siguientes problemáticas reportadas en las escuelas y genera un análisis conciso con el siguiente formato:
 
@@ -130,7 +118,7 @@ Requisitos:
 - NO uses asteriscos (**) para el formato
 - Usa <strong> SOLO para los nombres de las escuelas
 - NO uses <strong> en las problemáticas o impactos, utiliza <b> en su lugar
-- Los nombres de escuelas deben estar en negrita usando <strong>`
+- Los nombres de escuelas deben estar en negrita usando <strong>`;
 
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
@@ -145,24 +133,24 @@ Requisitos:
           }]
         })
       }
-    )
+    );
 
     if (!response.ok) {
-      throw new Error('Error en la llamada a la API de Gemini')
+      throw new Error('Error en la llamada a la API de Gemini');
     }
 
-    const data = await response.json()
-    const text = data.candidates[0].content.parts[0].text
+    const data = await response.json();
+    const text = data.candidates[0].content.parts[0].text;
 
     // Guardar en caché
-    setCachedResponse(cacheKey, text)
+    setCachedResponse(cacheKey, text);
 
-    return NextResponse.json({ text })
+    return NextResponse.json({ text });
   } catch (error) {
-    console.error('Error al generar análisis diario:', error)
+    console.error('Error al generar análisis diario:', error);
     return NextResponse.json(
       { error: 'Error al generar el análisis diario' },
       { status: 500 }
-    )
+    );
   }
-} 
+}
