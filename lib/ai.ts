@@ -1,6 +1,6 @@
 import type { Escuela } from "@/types/iEscuela"
 import { limpiarTexto, normalizarTexto } from "@/lib/utils"
-import { getAllEscuelas } from "./escuelas"
+import { getAllEscuelas } from "@/lib/utils"
 import { supervisoresPorDepartamento } from "@/types/iEscuela"
 
 interface ProblematicaEscuela {
@@ -49,7 +49,7 @@ export async function generateGeminiInsight(supervisor: string) {
     }
 
     // Para análisis específico de supervisor, usar el endpoint normal
-    const problematicas = obtenerProblematicasPorSupervisor(getAllEscuelas(), supervisor)
+    const problematicas = obtenerProblematicasPorSupervisor(await getAllEscuelas(), supervisor)
     
     console.log("Datos enviados a la API:", {
       supervisor,

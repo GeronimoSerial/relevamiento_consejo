@@ -4,7 +4,7 @@
 import { memo, useEffect, useState, useRef } from "react"
 import { motion } from "framer-motion"
 import { X, PartyPopper, Calendar } from "lucide-react"
-import { getAllEscuelas } from "@/lib/escuelas"
+import { getAllEscuelas } from "@/lib/utils"
 import type { Escuela } from "@/types/iEscuela"
 
 interface AniversariosModalProps {
@@ -74,7 +74,7 @@ const AniversariosModal = memo(function AniversariosModal({ onClose }: Aniversar
     try {
       // Simulamos una pequeña demora para mostrar el estado de carga
       await new Promise(resolve => setTimeout(resolve, 500))
-      const escuelasHoy = obtenerEscuelasAniversario(getAllEscuelas())
+      const escuelasHoy = obtenerEscuelasAniversario(await getAllEscuelas())
       // Cargamos las escuelas que cumplen aniversario hoy
       setEscuelasAniversario(escuelasHoy)
     } catch (error) {

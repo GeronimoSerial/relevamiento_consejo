@@ -82,6 +82,10 @@ const InfoButton = memo(() => (
 InfoButton.displayName = 'InfoButton';
 
 function EstadisticasContent({ escuelas }: EstadisticasContentProps) {
+  // Log para depuración
+  console.log("Datos de escuelas recibidos:", escuelas.length)
+  console.log("Primera escuela:", escuelas[0])
+
   // Estadísticas generales calculadas una sola vez
   const estadisticasGenerales = useMemo(() => {
     const totalEscuelas = escuelas.length

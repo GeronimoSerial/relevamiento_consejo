@@ -32,6 +32,10 @@ export default function MatriculaPorDepartamento({ escuelas }: MatriculaPorDepar
   const data = useMemo(() => {
     // Si hay escuelas, usar datos reales
     if (escuelas && escuelas.length > 0) {
+      console.log("Procesando datos para gráfico de matrícula por departamento")
+      console.log("Total de escuelas:", escuelas.length)
+      console.log("Primera escuela:", escuelas[0])
+
       // Agrupar por departamento y sumar matrículas
       const departamentos = escuelas.reduce(
         (acc, escuela) => {
@@ -56,15 +60,7 @@ export default function MatriculaPorDepartamento({ escuelas }: MatriculaPorDepar
     }
 
     // Si no hay escuelas, usar datos ficticios
-    return [
-      { name: "Paraná", value: 4500 },
-      { name: "Concordia", value: 3200 },
-      { name: "Gualeguaychú", value: 2800 },
-      { name: "Diamante", value: 1500 },
-      { name: "La Paz", value: 1200 },
-      { name: "Federación", value: 950 },
-      { name: "Victoria", value: 850 },
-    ]
+ 
   }, [escuelas, isMobile])
 
   return (

@@ -9,7 +9,8 @@ import SearchBar from "@/components/principal/SearchBar"
 import SchoolCard from "@/components/principal/SchoolCard"
 import Pagination from "@/components/principal/Pagination"
 import NoResults from "@/components/NoResults"
-import { filtrarEscuelas, paginarEscuelas } from "@/lib/escuelas"
+import { paginarEscuelas } from "@/lib/utils"
+import { filtrarEscuelas } from "@/lib/utils"
 import type { Escuela } from "@/types/iEscuela"
 
 // Importar el modal de forma dinámica para reducir el bundle inicial
@@ -34,7 +35,7 @@ export default function EscuelasClient({ initialEscuelas }: EscuelasClientProps)
   const initialSupervisor = searchParams.get("supervisor") || ""
   const initialPage = Number.parseInt(searchParams.get("page") || "1", 10)
 
-  const [escuelas] = useState<Escuela[]>(initialEscuelas)
+  const [escuelas] = useState<Escuela[]>(initialEscuelas || [])
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm)
   const [supervisor, setSupervisor] = useState(initialSupervisor)
   const [selectedEscuela, setSelectedEscuela] = useState<Escuela | null>(null)

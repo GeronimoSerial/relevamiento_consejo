@@ -15,7 +15,7 @@ interface SchoolCardProps {
 const SchoolCard = memo(function SchoolCard({ escuela, onVerMas }: SchoolCardProps) {
   // Obtener los supervisores del departamento
   const getSupervisores = () => {
-    return supervisoresPorDepartamento[escuela.departamento.trim()] || []
+    return supervisoresPorDepartamento[escuela.departamento.trim() || ""] || []
   }
 
   const supervisores = getSupervisores()
